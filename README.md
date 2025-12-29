@@ -1,9 +1,7 @@
 # Oppleo
 
-```diff
-- ❌ NOTE: This is a continuation of ilseh/Oppleo, upgrading software package levels and moving from Raspbian Buster to Raspberry OS 64bit on Raspberry Pi 5 4GB, updating Python from 3.9 to 3.14, updating liquibase, PostgreSQL etc. to recent versions.
+❌ NOTE: This is a continuation of ilseh/Oppleo, upgrading software package levels and moving from Raspbian Buster to Raspberry OS 64bit on Raspberry Pi 5 4GB, updating Python from 3.9 to 3.14, updating liquibase, PostgreSQL etc. to recent versions.
 Work in progress, also this readme is not updated yet.
-```
 
 ![Oppleo Dashboard](src/nl/oppleo/webapp/static/images/about_dashboard.png)
 
