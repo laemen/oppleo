@@ -11,10 +11,9 @@ oppleoSystemConfig = OppleoSystemConfig()
 
 
 class OppleoMFRC522_stub(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     def __init__(self):
-        self.__logger = logging.getLogger(__name__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(__name__))   
         self.__logger.debug("OppleoMFRC522_stub.init()")
 

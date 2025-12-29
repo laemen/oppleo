@@ -11,10 +11,9 @@ oppleoConfig = OppleoConfig()
 
 
 class BuzzerDev(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))     
 
     def buzz(self, buzz_duration_s, iterations=1):
@@ -30,10 +29,9 @@ class BuzzerDev(object):
 
 
 class BuzzerProd(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
     def buzz(self, buzz_duration_s, iterations=1):
@@ -72,10 +70,9 @@ class BuzzerProd(object):
 
 
 class Buzzer(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))    
 
         if oppleoSystemConfig.buzzerEnabled:

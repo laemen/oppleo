@@ -39,7 +39,7 @@ oppleoConfig = OppleoConfig()
 
 
 class OutboundEvent(object):
-    logger = logging.getLogger('nl.oppleo.utils.OutboundEvent')
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     """ 
       public = When True emits the message and contents to all connected clients. When False only emits to 
@@ -66,7 +66,7 @@ class OutboundEvent(object):
 
         # Send MQTT event if enabled
         if oppleoSystemConfig.mqttOutboundEnabled and room is not None:
-            OutboundEvent.logger.debug('Webclient specific message (system status on connect) not send to MQTT.')
+            OutboundEvent.__logger.debug('Webclient specific message (system status on connect) not send to MQTT.')
         if oppleoSystemConfig.mqttOutboundEnabled and room is None:
             OutboundEvent.emitMQTTEvent( event=event,                               \
                                          data=data,                                 \
@@ -98,12 +98,11 @@ class OutboundEvent(object):
         if status is not None:
             msg['status'] = status
 
-        OutboundEvent.logger.debug(f'Submit msg to MQTT topic ... {msg}')
+        OutboundEvent.__logger.debug(f'Submit msg to MQTT topic ... {msg}')
         try:
             oppleoMqttClient.publish(topic=topic, message=json.dumps(msg, default=str), waitForPublish=waitForPublish)
         except Exception as e:
-            OutboundEvent.logger.error('MQTT server enabled but not reachable! {}'.format(str(e)))
-
+            OutboundEvent.__logger.error('MQTT server enabled but not reachable! {}'.format(str(e)))
 
 
     """ 
@@ -139,7 +138,7 @@ class OutboundEvent(object):
                 msg['room'] = room
             msg['namespace'] = namespace
             msg['public'] = public
-            OutboundEvent.logger.debug(f'Submit msg to websocket emit queue ... {msg}')
+            OutboundEvent.__logger.debug(f'Submit msg to websocket emit queue ... {msg}')
             wsEmitQueue.put(msg)
         else:
-            OutboundEvent.logger.debug('Websocket emit queue not instantiated')
+            OutboundEvent.__logger.debug('Websocket emit queue not instantiated')

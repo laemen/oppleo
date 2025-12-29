@@ -16,7 +16,7 @@ oppleoConfig = OppleoConfig()
 
 class WebSocketQueueReaderBackgroundTask(object):
     # Count the message updates send through the websocket
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     counter = 0
     most_recent = ""
     appSocketIO = None
@@ -24,7 +24,6 @@ class WebSocketQueueReaderBackgroundTask(object):
     stop_event = None
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.thread = None
         self.stop_event = threading.Event()

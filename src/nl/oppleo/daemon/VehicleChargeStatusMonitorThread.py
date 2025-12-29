@@ -27,9 +27,9 @@ oppleoSystemConfig = OppleoSystemConfig()
 oppleoConfig = OppleoConfig()
 
 class VehicleChargeStatusMonitorThread(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __thread = None
     __threadLock = None
-    __logger = None
     __stop_event = None
 
     __rfidTag = None        # The ID string
@@ -43,7 +43,6 @@ class VehicleChargeStatusMonitorThread(object):
     def __init__(self):
         self.__threadLock = threading.Lock()
         self.__stop_event = threading.Event()
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))               
 
     @property

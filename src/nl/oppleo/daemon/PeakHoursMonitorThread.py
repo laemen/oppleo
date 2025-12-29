@@ -13,10 +13,10 @@ oppleoSystemConfig = OppleoSystemConfig()
 oppleoConfig = OppleoConfig()
 
 class PeakHoursMonitorThread(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")    
     thread = None
     threadLock = None
     appSocketIO = None
-    __logger = None
     stop_event = None
     # Check EVSE status change every 2 seconds [seconds]
     changeEvseStatusCheckInterval = 2
@@ -26,7 +26,6 @@ class PeakHoursMonitorThread(object):
     sleepInterval = 0.25
 
     def __init__(self, appSocketIO ):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
         self.threadLock = threading.Lock()
         self.stop_event = threading.Event()

@@ -16,14 +16,13 @@ class Singleton(type):
 
 
 class OppleoMqttClient(object, metaclass=Singleton):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     mqttClient = None
 
     def __init__(self) -> None:
         super().__init__()
 
-        self.__logger = logging.getLogger(__nself.__class__.__module__ame__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))       
          
         # Set Connecting Client ID

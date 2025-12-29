@@ -14,14 +14,13 @@ from nl.oppleo.models.KeyValueStoreModel import KeyValueStoreModel
 
 class PolestarPyWrapper:
     __KVSTORE = 'pypolestar'
-    __logger: Logger | None = None
+    __logger: logging.Logger = logging.getLogger(__name__)
     __username = None       # Rfid unique key
     __api = None
     __rfid = None
     
 
     def __init__(self, rfid:str|None=None, username:str|None=None):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.debug('PolestarPyWrapper.__init__')
         self.__rfid = rfid
         self.__username = username

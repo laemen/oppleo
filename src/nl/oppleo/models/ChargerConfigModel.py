@@ -1,6 +1,6 @@
-from typing import ClassVar, Union
 import datetime
 import logging
+from typing import ClassVar
 
 from marshmallow import fields, Schema
 from marshmallow.fields import Boolean, Integer
@@ -29,8 +29,7 @@ oppleoSystemConfig = OppleoSystemConfig()
 """
 
 class ChargerConfigModel(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
-
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'charger_config'
 
     charger_id = Column(String(100), primary_key=True)
@@ -72,7 +71,7 @@ class ChargerConfigModel(Base):
     restrict_menu = Column(Boolean) 
 
     allow_local_dashboard_access = Column(Boolean) 
-    router_ip_address = Column(String(255)) 
+    router_ip_address = Column(String(20)) 
 
     receipt_prefix = Column(String(20))
 
@@ -100,17 +99,13 @@ class ChargerConfigModel(Base):
     behind_ssl_proxy = Column(Boolean)
 
     def __init__(self):
-        if self.__logger is None:
-            self.__logger = logging.getLogger(self.__class__.__module__)
-            self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))        
+        self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))        
         self.__logger.debug('.init()')
 
     # sqlalchemy calls __new__ not __init__ on reconstructing from database. Decorator to call this method
-    @orm.reconstructor   
+    @orm.reconstructor
     def init_on_load(self):
-        if self.__logger is None:
-            self.__logger = logging.getLogger(self.__class__.__module__)
-            self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))        
+        self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))        
         self.__logger.debug('.init_on_load()')
         self.__init__()
 
@@ -201,9 +196,6 @@ class ChargerConfigModel(Base):
             ChargerConfigModel.__cleanupDbSession(db_session, ChargerConfigModel.__class__)
         except Exception as e:
             # Nothing to roll back
-            if ChargerConfigModel.__logger is None:
-                ChargerConfigModel.__logger = logging.getLogger(self.__class__.__module__)
-                ChargerConfigModel.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))    
             ChargerConfigModel.__logger.error("Could not query from {} table in database".format(ChargerConfigModel.__tablename__ ), exc_info=True)
             raise DbException("Could not query from {} table in database".format(ChargerConfigModel.__tablename__ ))
         return ccm
@@ -247,14 +239,13 @@ class ChargerConfigModel(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.ChargerConfigModel')
-        logger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
+        ChargerConfigModellogger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            ChargerConfigModel.__logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 

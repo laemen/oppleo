@@ -35,7 +35,7 @@ oppleoSystemConfig = OppleoSystemConfig()
 """
 
 class WebAuthNCredentialModel(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'webauthn_credentials'
 
     credential_id = Column(String(256), primary_key=True)
@@ -82,11 +82,10 @@ class WebAuthNCredentialModel(Base):
     @staticmethod
     def create(verifiedRegistration:Union[VerifiedRegistration,None]=None, name:Union[str, None]=None, user:Union[User,None]=None, origin:Union[str, None]=None):
 
-        logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-        logger.debug(".create()")
+        WebAuthNCredentialModel.__logger.debug(".create()")
 
         if verifiedRegistration is None or user is None:
-            logger.debug("No verifiedRegistration or user.")
+            WebAuthNCredentialModel.__logger.debug("No verifiedRegistration or user.")
             return None
         
         newCred = WebAuthNCredentialModel()
@@ -126,7 +125,7 @@ class WebAuthNCredentialModel(Base):
 
         newCred.save()
 
-        logger.debug("Created!")
+        WebAuthNCredentialModel.__logger.debug("Created!")
 
         return newCred
 
@@ -144,11 +143,10 @@ class WebAuthNCredentialModel(Base):
     @staticmethod
     def get(credential_owner:Union[str,None]=None, credential_id:Union[str, None]=None):
 
-        logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-        logger.debug(".get()")
+        WebAuthNCredentialModel.__logger.debug(".get()")
 
         if credential_id is None or credential_owner is None:
-            logger.debug("No credential_id or credential_owner.")
+            WebAuthNCredentialModel.__logger.debug("No credential_id or credential_owner.")
             return None
         
         registeredCredential = None
@@ -232,8 +230,6 @@ class WebAuthNCredentialModel(Base):
     """
     @staticmethod
     def getRegisteredCredentialCount(credential_owner:Union[str, None]=None) -> int:
-        WebAuthNCredentialModel.__logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-
         WebAuthNCredentialModel.__logger.debug(".getRegisteredCredentialCount()")
 
         db_session = DbSession()
@@ -257,7 +253,6 @@ class WebAuthNCredentialModel(Base):
     """
     @staticmethod
     def hasRegisteredCredentials(credential_owner:Union[str, None]=None) -> bool:
-        WebAuthNCredentialModel.__logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
 
         return WebAuthNCredentialModel.getRegisteredCredentialCount(credential_owner=credential_owner) > 0
 
@@ -266,8 +261,6 @@ class WebAuthNCredentialModel(Base):
     """
     @staticmethod
     def getRegisteredCredentialRegistrations(credential_owner:Union[str, None]=None):
-        WebAuthNCredentialModel.__logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-
         WebAuthNCredentialModel.__logger.debug(".getRegisteredCredentialRegistrations()")
 
         db_session = DbSession()
@@ -290,8 +283,6 @@ class WebAuthNCredentialModel(Base):
     """
     @staticmethod
     def getRegisteredCredentials(credential_owner:Union[str, None]=None):
-        WebAuthNCredentialModel.__logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-
         WebAuthNCredentialModel.__logger.debug(".getRegisteredCredentials()")
 
         credentialRegistrations = WebAuthNCredentialModel.getRegisteredCredentialRegistrations(credential_owner=credential_owner)
@@ -309,7 +300,6 @@ class WebAuthNCredentialModel(Base):
     """
     @staticmethod
     def getRegisteredCredential(credential_id:Union[str, None]=None, username:Union[str, None]=None):
-        WebAuthNCredentialModel.__logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
         WebAuthNCredentialModel.__logger.debug(".getRegisteredCredential()")
 
         if credential_id is None:
@@ -375,14 +365,13 @@ class WebAuthNCredentialModel(Base):
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
 
-        logger = getLogger('nl.oppleo.models.WebAuthNCredentialModel')
-        logger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
+        WebAuthNCredentialModel.__logger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            WebAuthNCredentialModel.__logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 

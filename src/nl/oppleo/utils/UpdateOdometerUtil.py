@@ -26,7 +26,7 @@ oppleoConfig = OppleoConfig()
 
 
 class UpdateOdometerUtil:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __charge_session_id = None
     __thread = None
     __threadLock = None
@@ -34,7 +34,6 @@ class UpdateOdometerUtil:
 
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.__logger.debug('UpdateOdometerUtil.__init__')
         self.__thread = None

@@ -12,12 +12,13 @@ from nl.oppleo.config.OppleoConfig import oppleoConfig
 """
 
 class Version():
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
+
     major:int = 0
     minor:int = 0
     build:int = 0
 
     def __init__(self, version:str='0.0.0'):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         if version is None:
             return
         keys = version.split('.')
@@ -46,7 +47,7 @@ class Singleton(type):
 
 
 class ChangeLog():
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __FILENAME = 'changelog.txt'
     __changelog = {}
     __currentVersion = None
@@ -63,8 +64,6 @@ class ChangeLog():
 
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
-
         fileContent = self.__readChangeLogFile__()
         parsedChangeLog = self.parse(changeLogText=fileContent)
         self.__currentVersion, self.__currentVersionDate = self.getMostRecentVersion(parsedChangeLog)

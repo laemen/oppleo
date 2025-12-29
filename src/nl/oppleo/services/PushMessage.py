@@ -20,8 +20,7 @@ class Singleton(type):
 
 
 class PushMessage(object, metaclass=Singleton):
-
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     priorityVeryLow = -2
     priorityModerate = -1
@@ -30,7 +29,6 @@ class PushMessage(object, metaclass=Singleton):
     priorityEmergency = 2
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
     def sendMessage(self, title, message, priority=priorityNormal):

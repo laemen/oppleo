@@ -133,12 +133,12 @@ try:
                 restrictDashboardAccess=oppleoConfig.restrictDashboardAccess, 
                 remote_addr=request.remote_addr,
                 routerIPAddress=oppleoConfig.routerIPAddress,
-                is_authenticated=current_user.is_authenticated())
+                is_authenticated=current_user.is_authenticated)
                 )
 
             if (not oppleoConfig.restrictDashboardAccess or \
                 ( oppleoConfig.allowLocalDashboardAccess and request.remote_addr != oppleoConfig.routerIPAddress ) or \
-                current_user.is_authenticated()):
+                current_user.is_authenticated):
 
                 # TODO REMOVE - EXTRA LOGGING
                 oppleoLogger.debug('config_dashboard_access_restriction decorator [2] allowed')
@@ -188,7 +188,7 @@ try:
             if request.sid not in oppleoConfig.connectedClients.keys():
                 oppleoConfig.connectedClients[request.sid] = {
                                     'sid'       : request.sid,
-                                    'auth'      : False if current_user is None or not current_user.is_authenticated() else True,
+                                    'auth'      : False if current_user is None or not current_user.is_authenticated else True,
                                     'stats'     : 'connected',
                                     'namespace' : request.namespace if request.namespace is not None else 'UNKNOWN'
                                     }
@@ -205,7 +205,7 @@ try:
             OutboundEvent.emitMQTTEvent( event='connect',
                                         data={
                                             "clientId"          : request.sid,
-                                            'auth'              : False if current_user is None or not current_user.is_authenticated() else True,
+                                            'auth'              : False if current_user is None or not current_user.is_authenticated else True,
                                             'namespace'         : request.namespace if request.namespace is not None else 'UNKNOWN',
                                             "clientsConnected"  : len(oppleoConfig.connectedClients)
                                         },

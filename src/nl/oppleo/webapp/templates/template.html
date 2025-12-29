@@ -822,7 +822,7 @@
                 )
                 $('#updateSoftwareMenuItem').parent().hide()
                 $('#checkSoftwareStatusMenuItem').on('click', () => {
-                    {% if current_user.is_authenticated() %}
+                    {% if current_user.is_authenticated %}
                     getSoftwareStatus()
                     {% else %}
                     window.location.replace( '{{ url_for('flaskRoutes.login') }}' )
@@ -1360,7 +1360,7 @@
                             </div>
                         </li>
  
-                        {% if current_user.is_authenticated() %}
+                        {% if current_user.is_authenticated %}
 
                         <li class="list-inline-item dropdown notification-list">
                             <a class="nav-link dropdown-toggle waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
@@ -1389,7 +1389,7 @@
 
                         {% endif %}
 
-                        {% if not current_user.is_authenticated() %}
+                        {% if not current_user.is_authenticated %}
 
                         <li class="list-inline-item dropdown notification-list">
                             <a class="nav-link dropdown-toggle waves-effect nav-user" data-toggle="dropdown" href="#" role="button"
@@ -1419,9 +1419,9 @@
             <div class="container-fluid">
                 <div id="navigation">
                     <ul class="navigation-menu">
-                        <li{% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %} class="has-submenu"{% endif %}>
+                        <li{% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %} class="has-submenu"{% endif %}>
 
-                            {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %}
+                            {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %}
                             <a href="#"><i class="fa fa-charging-station"></i> Oppleo</a>
                             {% else %}
                             <a href="{{ url_for('flaskRoutes.index') }}" class="stay">
@@ -1429,7 +1429,7 @@
                             </a>
                             {% endif %}
     
-                            {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %}
+                            {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %}
                             <ul class="submenu">
                                 <li>
                                     <a href="{{ url_for('flaskRoutes.index') }}" class="stay">
@@ -1484,7 +1484,7 @@
                                         </ul>
                                     </li>
                                     
-                                    {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %}
+                                    {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %}
                                     <li class="has-submenu">
                                         <a href="#"><i class="fas fa-exclamation-triangle"></i> Beheer</a>
                                         <ul class="submenu">
@@ -1538,7 +1538,7 @@
                             {% endif %}
 
                         </li>
-                        {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %}
+                        {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %}
                         <li class="has-submenu">
                             <a href="#"><i class="fas fa-file-invoice-dollar"></i> Laadsessies</a>
                             <ul class="submenu">
@@ -1566,7 +1566,7 @@
                         </li>
                         {% endif %}
 
-                        {% if (not current_user.is_authenticated() and oppleoconfig.restrictMenu) %}
+                        {% if (not current_user.is_authenticated and oppleoconfig.restrictMenu) %}
                         <li>
                             <a href="{{ url_for('flaskRoutes.usage_table' ) }}" class="stay">
                                 <i class="fas fa-table"></i> Verbruik
@@ -1581,7 +1581,7 @@
                                         <i class="fas fa-table"></i> Tabel
                                     </a>
                                 </li>
-                                {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated()) %}
+                                {% if (not oppleoconfig.restrictMenu or current_user.is_authenticated) %}
                                 <li class="has-submenu">
                                     <a href="#"><i class="fas fa-chart-line"></i> Grafieken</a>
                                     <ul class="submenu">
@@ -1617,7 +1617,7 @@
                         </li>
                         {% endif %}
 
-                        {% if (not current_user.is_authenticated() and oppleoconfig.restrictMenu) %}
+                        {% if (not current_user.is_authenticated and oppleoconfig.restrictMenu) %}
                         <li>
                             <a href="{{ url_for('flaskRoutes.about') }}" class="stay">
                                 <i class="fas fa-info-circle"></i> Over Oppleo

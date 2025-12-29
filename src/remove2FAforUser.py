@@ -31,13 +31,13 @@ for user in users:
 
 try:
     username = input("Username to remove 2FA from: ")
-    user = User.get(username)
+    user: User = User.get(username)
     if user is None:
         print(" User with username {} not found.".format(username))
         print("Done")
         exit()
 
-    if not user.has_enabled_2FA():
+    if not user.has_enabled_2FA:
         print(" User with username {} does not have 2FA enabled.".format(username))
         print("Done")
         exit()

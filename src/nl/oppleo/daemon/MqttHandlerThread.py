@@ -22,12 +22,11 @@ oppleoConfig = OppleoConfig()
 class MqttHandlerThread(object):
     threadLock = None
     appSocketIO = None
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __mqtt_handler_thread = None
     stop_event = None
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
         self.threadLock = threading.Lock()
         self.__mqtt_handler_thread = None

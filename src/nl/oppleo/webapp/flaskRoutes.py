@@ -106,7 +106,8 @@ DETAIL_CODE_202_ACCEPTED                            = 202    # HTTP_CODE_202_ACC
 """
 flaskRoutes = Blueprint('flaskRoutes', __name__, template_folder='templates')
 
-flaskRoutesLogger = logging.getLogger(__name__)
+flaskRoutesLogger = logging.getLogger(f"{__name__}")
+
 flaskRoutesLogger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(__name__))
 flaskRoutesLogger.debug('Initializing routes')
 
@@ -134,7 +135,7 @@ def RepresentsFloat(s):
 def authenticated_resource(function):
     @wraps(function)
     def decorated(*args, **kwargs):
-        if (current_user.is_authenticated()):
+        if (current_user.is_authenticated):
             return function(*args, **kwargs)
         # return abort(403) # unauthenticated
         # Not allowed.
@@ -166,14 +167,14 @@ def config_dashboard_access_restriction(function):
             oppleoConfig.allowLocalDashboardAccess,
             request.remote_addr,
             oppleoConfig.routerIPAddress,
-            current_user.is_authenticated()
+            current_user.is_authenticated
             ))
 
         if (not oppleoConfig.restrictDashboardAccess or
             ( oppleoConfig.allowLocalDashboardAccess and  
                 not IPv4.ipInSubnetList(ip=request.remote_addr, subnetList=oppleoConfig.routerIPAddress, default=False) 
             ) or
-            current_user.is_authenticated()
+            current_user.is_authenticated
             ):
             flaskRoutesLogger.debug('config_dashboard_access_restriction() access allowed')
             return function(*args, **kwargs)
@@ -315,9 +316,9 @@ def login2(username:str=None):
             })                
 
     # Valid password, 2FA required?
-    if (user.has_enabled_2FA() and 
-            (user.is_2FA_local_enforced() or 
-                (not user.is_2FA_local_enforced() and IPv4.ipInSubnetList(ip=request.remote_addr, subnetList=oppleoConfig.routerIPAddress, default=False))
+    if (user.has_enabled_2FA and 
+            (user.is_2FA_local_enforced or 
+                (not user.is_2FA_local_enforced and IPv4.ipInSubnetList(ip=request.remote_addr, subnetList=oppleoConfig.routerIPAddress, default=False))
             )
         ): 
         # Password correct, validate the code
@@ -416,7 +417,7 @@ def change_password(username:str=None):
               for now accept any
     """
     # Valid password, 2FA enabled?
-    if current_user.has_enabled_2FA():
+    if current_user.has_enabled_2FA:
         # Password correct, validate the code
         shared_secret = decryptAES(key=currentPassword, encData=current_user.shared_secret)
         if totp is None or not validateTotp(totp=totp, shared_secret=shared_secret):
@@ -431,7 +432,7 @@ def change_password(username:str=None):
     user = current_user
     user.password = generate_password_hash(newPassword)
     # Update the shared secret encryption to the new password
-    if current_user.has_enabled_2FA():
+    if current_user.has_enabled_2FA:
         user.shared_secret = encryptAES(key=newPassword, plainData=shared_secret)
     user.save()
     return jsonify({
@@ -1323,7 +1324,7 @@ def active_charge_session():
             'offPeakEnabled'    : oppleoConfig.offpeakEnabled,
             'offPeakAllowedOnce': oppleoConfig.allowPeakOnePeriod,
             'offPeak'           : True if evseOutput.isOffPeak else False,
-            'auth'              : True if (current_user.is_authenticated()) else False,
+            'auth'              : True if (current_user.is_authenticated) else False,
             'reason'            : 'No active charge session'
             })
     try:
@@ -1337,9 +1338,9 @@ def active_charge_session():
             'offPeakEnabled'    : oppleoConfig.offpeakEnabled,
             'offPeakAllowedOnce': oppleoConfig.allowPeakOnePeriod,
             'offPeak'           : True if evseOutput.isOffPeak else False,
-            'auth'              : True if (current_user.is_authenticated()) else False,
-            'data'              : open_charge_session_for_device.to_str() if (current_user.is_authenticated()) else None,
-            'rfid'              : rfid_data.to_str() if (current_user.is_authenticated()) else None
+            'auth'              : True if (current_user.is_authenticated) else False,
+            'data'              : open_charge_session_for_device.to_str() if (current_user.is_authenticated) else None,
+            'rfid'              : rfid_data.to_str() if (current_user.is_authenticated) else None
             })
     except Exception as e:
         flaskRoutesLogger.error("active_charge_session - could not return information", exc_info=True)
@@ -3190,7 +3191,7 @@ def account(username:str=None, param:str=None, value:str=None):
                 'status'   : HTTP_CODE_200_OK,
                 'username' : username,
                 'param'    : param,
-                'value'    : current_user.is_2FA_local_enforced()
+                'value'    : current_user.is_2FA_local_enforced
                 })
         return jsonify({
             'status'   : HTTP_CODE_404_NOT_FOUND, 
@@ -3212,7 +3213,7 @@ def account(username:str=None, param:str=None, value:str=None):
                 'status': HTTP_CODE_200_OK,
                 'username' : username,
                 'param' : param,
-                'value' : current_user.is_2FA_local_enforced()
+                'value' : current_user.is_2FA_local_enforced
                 })
 
         if param == 'avatar':
@@ -3303,7 +3304,7 @@ def enable_2FA():
                 'msg'   : 'Wachtwoord incorrect'
                 })
         # Password correct, not already enabled?
-        if current_user.has_enabled_2FA():
+        if current_user.has_enabled_2FA:
             # cannot re-enable
             return jsonify({
                 'status'  : HTTP_CODE_400_BAD_REQUEST,
@@ -3388,7 +3389,7 @@ def disable_2FA():
                 'msg'   : 'Wachtwoord incorrect'
                 })                
         # Password correct, 2FA enabled?
-        if not current_user.has_enabled_2FA():
+        if not current_user.has_enabled_2FA:
             # Cannot disable
             return jsonify({
                 'status'  : HTTP_CODE_400_BAD_REQUEST,
@@ -4126,7 +4127,7 @@ def webauthn_authentication_POST():
     if passkeyAction == 'login':
         
         # If the user is not logged in, login the user
-        if current_user is None or not current_user.is_authenticated():
+        if current_user is None or not current_user.is_authenticated:
             # The user is not logged in, login the user. Find the user
             user = User.get(username=registeredCredential.credential_owner)
             if user is None:

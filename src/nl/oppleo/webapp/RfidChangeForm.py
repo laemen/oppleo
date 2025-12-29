@@ -12,7 +12,7 @@ class RfidChangeForm(FlaskForm):
     ENGLISH = 0
     DUTCH = 1
 
-    logger = logging.getLogger('nl.oppleo.webapp.RfidChangeForm')
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     rfid = HiddenField('rfid')  # - read-only, no editing
     name = StringField('Naam')
@@ -57,7 +57,7 @@ class RfidChangeForm(FlaskForm):
                 elif error_text == 'Invalid email address.':
                     translatedErrors[translated_field_name].append('Ongeldig formaat')
                 else:
-                    self.logger.warning('No translation for "{}"'.format(error_text))
+                    self.__logger.warning('No translation for "{}"'.format(error_text))
                     translatedErrors[translated_field_name].append(error_text)
 
         return translatedErrors

@@ -1,5 +1,5 @@
 from typing import Union, List
-from logging import getLogger
+import logging
 import threading
 
 from datetime import datetime
@@ -47,14 +47,13 @@ class Singleton(type):
 
 
 class StoredCredentialCreationOptions(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
-    __logger = None
     publicKeyCredentialCreationOptions:Union[PublicKeyCredentialCreationOptions, None] = None
     user:Union[User, None] = None
     created:datetime = datetime.now()
 
     def __init__(self, publicKeyCredentialCreationOptions:Union[PublicKeyCredentialCreationOptions, None]=None, user:Union[User, None]=None):
-        self.__logger = getLogger(self.__class__.__module__)
         self.__logger.debug('Initializing StoredCredentialCreationOptions...')
 
         if publicKeyCredentialCreationOptions is None:
@@ -68,14 +67,13 @@ class StoredCredentialCreationOptions(object):
 
 
 class StoredCredentialRequestOptions(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
-    __logger = None
     publicKeyCredentialRequestOptions:Union[PublicKeyCredentialRequestOptions, None] = None
     username:Union[str, None] = None
     created:datetime = datetime.now()
 
     def __init__(self, publicKeyCredentialRequestOptions:Union[PublicKeyCredentialRequestOptions, None]=None, username:Union[str, None]=None):
-        self.__logger = getLogger(self.__class__.__module__)
         self.__logger.debug('Initializing StoredCredentialRequestOptions...')
 
         if publicKeyCredentialRequestOptions is None:
@@ -90,15 +88,14 @@ class StoredCredentialRequestOptions(object):
 
 
 class WebAuthNCredentialOptionsStore(object, metaclass=Singleton):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
-    __logger = None
     __threadLock = None
  
     __storedCredentialsCreationOptions:List = []
     __storedCredentialsRequestOptions:List = []
 
     def __init__(self):
-        self.__logger = getLogger(self.__class__.__module__)
         self.__logger.debug('Initializing WebAuthNCredentialOptionsStore...')
         self.__threadLock = threading.Lock()
 

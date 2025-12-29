@@ -15,7 +15,7 @@ SECONDS_IN_HOUR = 60 * 60
 
 class EnergyDevice():
     counter = 0
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     energy_device_id = None
     enabled = False
     simulate = False
@@ -28,7 +28,6 @@ class EnergyDevice():
     def __init__(self, energy_device_id=None, modbusInterval:int=10, enabled:bool=False, appSocketIO=None, simulate:bool=False):
         global oppleoSystemConfig
         
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
         self.energy_device_id = energy_device_id
         self.modbusInterval = modbusInterval

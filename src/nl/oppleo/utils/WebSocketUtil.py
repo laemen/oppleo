@@ -2,7 +2,7 @@
 import logging
 
 class WebSocketUtil(object):
-    logger = logging.getLogger('nl.oppleo.utils.WebSocketUtil')
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     """ 
       public = When True emits the message and contents to all connected clients. When False only emits to 
@@ -36,7 +36,7 @@ class WebSocketUtil(object):
                 msg['room'] = room
             msg['namespace'] = namespace
             msg['public'] = public
-            WebSocketUtil.logger.debug(f'Submit msg to websocket emit queue ... {msg}')
+            WebSocketUtil.__logger.debug(f'Submit msg to websocket emit queue ... {msg}')
             wsEmitQueue.put(msg)
         else:
-            WebSocketUtil.logger.debug('Websocket emit queue not instantiated')
+            WebSocketUtil.__logger.debug('Websocket emit queue not instantiated')

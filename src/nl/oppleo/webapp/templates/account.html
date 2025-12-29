@@ -814,10 +814,10 @@
               <tr id="account_2fa">
                 <td>2-Factor Authenticatie:</td>
                 <td>
-                  <button type="button" class="btn btn-sm btn-outline-warning-success{% if current_user.has_enabled_2FA() %} d-none{% endif %}" id="modal-enable-2fa"> <i class="fas fa-angle-right"></i> Activeren </button>
-                  <button type="button" class="btn btn-sm btn-outline-success-warning{% if not current_user.has_enabled_2FA() %} d-none{% endif %}" id="modal-disable-2fa"> <i class="fas fa-angle-right"></i> Uitschakelen </button>
+                  <button type="button" class="btn btn-sm btn-outline-warning-success{% if current_user.has_enabled_2FA %} d-none{% endif %}" id="modal-enable-2fa"> <i class="fas fa-angle-right"></i> Activeren </button>
+                  <button type="button" class="btn btn-sm btn-outline-success-warning{% if not current_user.has_enabled_2FA %} d-none{% endif %}" id="modal-disable-2fa"> <i class="fas fa-angle-right"></i> Uitschakelen </button>
 
-                  <button type="button" class="btn btn-sm btn-outline-success{% if current_user.has_enabled_2FA() %} d-none{% endif %}" id="modal-2fa-info"
+                  <button type="button" class="btn btn-sm btn-outline-success{% if current_user.has_enabled_2FA %} d-none{% endif %}" id="modal-2fa-info"
                     data-toggle="tooltip" data-placement="bottom" data-html="true" title="" 
                     data-original-title="Klik voor meer informatie over 2-Factor authenticatie"
                     >
@@ -835,7 +835,7 @@
                     title="2FA toepassen bij inloggen op het lokale (thuis-)netwerk wanneer 2FA geactiveerd is. Deactiveren maakt inloggen op het lokale (thuis-)netwerk zonder 2FA code mogelijk. <br/>Het lokale netwerk kan worden ingesteld bij <span class='text-primary'><i class='fa fa-sliders-h'></i> Instellingen</span> <i class='fa fa-angle-right'></i> <span class='text-primary'><i class='fa fa-charging-station'></i> Laadpunt </span><i class='fa fa-angle-right'></i> <span class='text-primary'> <i class='fa fa-credit-card'></i> Afschermen </span>."
                   >
                   <input type="checkbox" 
-                    {% if current_user.is_2FA_local_enforced() %}checked{% endif %}
+                    {% if current_user.is_2FA_local_enforced %}checked{% endif %}
                     name="enforceLocal2FA"
                     id="enforceLocal2FA"
                     data-toggle="toggle"

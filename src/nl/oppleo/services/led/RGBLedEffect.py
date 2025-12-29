@@ -18,12 +18,13 @@ oppleoSystemConfig = OppleoSystemConfig()
 """
 
 class RGBLedEffect(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
+
     EFFECT_STATIC = 1
     EFFECT_PULSING = 2
     EFFECT_SWITCHING = 3
     VALID_EFFECTS = [ EFFECT_STATIC, EFFECT_PULSING, EFFECT_SWITCHING ]
     
-    __logger = None
     __red:Optional[LedPinBehaviour] = None
     __green:Optional[LedPinBehaviour] = None
     __blue:Optional[LedPinBehaviour] = None
@@ -38,7 +39,6 @@ class RGBLedEffect(object):
                  effect:int=0, 
                  frequency:int=0, 
                  combinedColorName:str="Unknown"):
-        self.__logger = logging.getLogger('nl.oppleo.services.RGBLedEffect')
         self.__red = red
         self.__green = green
         self.__blue = blue

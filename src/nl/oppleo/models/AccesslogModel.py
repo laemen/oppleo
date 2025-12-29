@@ -14,7 +14,7 @@ from sqlalchemy.exc import InvalidRequestError
 
 
 class AccesslogModel(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'accesslog'
     
     id = Column(Integer, primary_key=True)
@@ -112,14 +112,13 @@ class AccesslogModel(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.Base cleanupSession()')
-        logger.debug("Trying to cleanup database session, called from {}".format(cn))
+        AccesslogModel.__loggerlogger.debug("Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            AccesslogModel.__logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 class AccesslogSchema(Schema):

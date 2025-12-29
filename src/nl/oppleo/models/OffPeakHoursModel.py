@@ -36,7 +36,7 @@ class Weekday(IntEnum):
 
 
 class OffPeakHoursModel(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'off_peak_hours'
 
     """ WEEKDAY IS ZERO BASED - DATETIME WEEKDAY IS ZERO BASED - IN DATABASE DUTCH TEXT """
@@ -416,14 +416,13 @@ class OffPeakHoursModel(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.Base cleanupSession()')
-        logger.debug("Trying to cleanup database session, called from {}".format(cn))
+        OffPeakHoursModel.__logger.debug("Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            OffPeakHoursModel.__logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 class ChargerConfigSchema(Schema):

@@ -19,10 +19,7 @@ class Singleton(type):
 
 
 class ModulePresence(object, metaclass=Singleton):
-    """
-        Private variables
-    """
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     __enable_GPIO_stub          = True
     __enable_pigpio_stub        = True
@@ -40,7 +37,6 @@ class ModulePresence(object, metaclass=Singleton):
 
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
         try:

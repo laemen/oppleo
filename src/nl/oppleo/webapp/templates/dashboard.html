@@ -1097,7 +1097,7 @@
       }
       {% if oppleoconfig.vehicleDataOnDashboard %}
       // Don't actively request this information. Will come through web sockets, this call blocks the front end.
-      enableVehicleConnectedIdicator({% if current_user.is_authenticated() %}true{% else %}false{% endif %})
+      enableVehicleConnectedIdicator({% if current_user.is_authenticated %}true{% else %}false{% endif %})
       requestVehicleChargeStateUpdate()
       {% endif %}
     })

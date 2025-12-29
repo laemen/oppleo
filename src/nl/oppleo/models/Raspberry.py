@@ -17,7 +17,7 @@ class Raspberry(object):
     """
     Raspberry Model
     """
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
 
     def __init__(self):
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))     

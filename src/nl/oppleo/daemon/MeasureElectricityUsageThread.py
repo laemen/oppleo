@@ -11,14 +11,13 @@ oppleoSystemConfig = OppleoSystemConfig()
 oppleoConfig = OppleoConfig()
 
 class MeasureElectricityUsageThread(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     thread = None
     appSocketIO = None
     threadLock = None
     stop_event = None
 
     def __init__(self, appSocketIO):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
         self.appSocketIO = appSocketIO
         self.thread = None

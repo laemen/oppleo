@@ -9,7 +9,7 @@ from nl.oppleo.utils.ModulePresence import modulePresence
 oppleoSystemConfig = OppleoSystemConfig()
 
 class EvseReaderUtil:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     """
    A class to read PWM pulses and calculate their frequency
    and duty cycle.  The frequency is how often the pulse
@@ -28,7 +28,6 @@ class EvseReaderUtil:
       the old reading has no effect.  This may be used to
       smooth the data.
       """
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.pigpio = pigpio
         self.pi = pi

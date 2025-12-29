@@ -26,7 +26,7 @@ class OppleoSystemConfig(object, metaclass=Singleton):
     """
         Private variables
     """
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __ini_settings = None
     __restartRequired = False
 
@@ -515,7 +515,7 @@ class OppleoSystemConfig(object, metaclass=Singleton):
                         maxBytes=self.__LOG_MAX_BYTES,
                         backupCount=self.__LOG_BACKUP_COUNT
                         )
-        self.__logger = logging.getLogger(self.__class__.__module__)
+        self.__logger = logging.getLogger(f"{self.__class__}.{self.__module__}")
         self.__logger.setLevel(level=self.getLogLevelForModule(self.__class__.__module__))        
         
 

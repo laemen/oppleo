@@ -5,7 +5,7 @@ import logging
 """
 
 class LedPinBehaviour(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __pin = 0
     __low_intensity = 0
     __high_intensity = 0
@@ -14,7 +14,6 @@ class LedPinBehaviour(object):
                  pin:int=0, 
                  low_intensity:int=0, 
                  high_intensity:int=0):
-        self.__logger = logging.getLogger('nl.oppleo.services.LedPinBehaviour')
 
         self.__pin = pin
         if low_intensity < 0:

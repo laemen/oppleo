@@ -6,6 +6,8 @@ import requests
 import logging
 
 class GitUtil(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
+
     GIT_OPPLEO_CHANGELOG_URL = 'https://raw.githubusercontent.com/ilseh/Oppleo/{branch}/doc/changelog.txt'
     DEFAULT_BRANCH = "master"
     HTTP_TIMEOUT = 5    # 30
@@ -86,27 +88,26 @@ class GitUtil(object):
     @staticmethod
     def getChangeLogForBranch(branch:str="master"):
 
-        _logger = logging.getLogger('nl.oppleo.util.GitUtil')
-        _logger.debug('getChangeLogForBranch')
+        GitUtil.__logger.debug('getChangeLogForBranch')
 
         url = GitUtil.GIT_OPPLEO_CHANGELOG_URL.replace('{branch}', branch)
-        _logger.debug('url: {}'.format(url))
+        GitUtil.__logger.debug('url: {}'.format(url))
         try:
             r = requests.get(
                 url=url,
                 timeout=GitUtil.HTTP_TIMEOUT
             )
         except requests.exceptions.ConnectTimeout as ct:
-            _logger.debug('ConnectTimeout: {}'.format(ct))
+            GitUtil.__logger.debug('ConnectTimeout: {}'.format(ct))
             return None
         except requests.ReadTimeout as rt:
-            _logger.debug('ReadTimeout: {}'.format(rt))
+            GitUtil.__logger.debug('ReadTimeout: {}'.format(rt))
             return None
         if r.status_code != GitUtil.HTTP_200_OK:
-            _logger.debug('status_code: {}'.format(r.status_code))
+            GitUtil.__logger.debug('status_code: {}'.format(r.status_code))
             return None
 
-        _logger.debug('text: {}'.format(r.text))
+        GitUtil.__logger.debug('text: {}'.format(r.text))
         return r.text
 
    # Updates the git status with the remote server

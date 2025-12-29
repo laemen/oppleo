@@ -46,7 +46,7 @@ invalidate(token, key)
 
 @warnings.deprecated() 
 class TokenObj:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     code = None
     inUse:bool = False
     valid:bool = True
@@ -54,7 +54,6 @@ class TokenObj:
     key = None
 
     def __init__(self, code, inUse:bool=False, ref=None, key=None, valid:bool=True):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.code = code
         self.inUse = inUse
@@ -73,13 +72,12 @@ class Singleton(type):
 @warnings.deprecated() 
 #class TokenMediator(object, metaclass=Singleton):
 class TokenMediator:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __lock = None
     __tokens = {}
     __KEY_SIZE = 24
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.__lock = threading.Lock()
 

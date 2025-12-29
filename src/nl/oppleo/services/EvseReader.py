@@ -10,7 +10,7 @@ oppleoSystemConfig = OppleoSystemConfig()
 oppleoConfig = OppleoConfig()
 
 class EvseReader(object):
-    __logger: logging.Logger = logging.getLogger(__name__)
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     reader = None
 
     def __init__(self):

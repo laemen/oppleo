@@ -40,7 +40,7 @@ StatusStr = [ 'initial', 'started', 'paused', 'completed', 'cancelled' ]
 
 
 class MqttSendHistoryThread(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __thread = None
     __threadLock = None
     __pause_event = None
@@ -63,7 +63,6 @@ class MqttSendHistoryThread(object):
                  delay_between_mqtt_events=DEFAULT_DELAY_BETWEEN_MQTT_EVENTS, 
                  time_between_front_end_updates=DEFAULT_TIME_BETWEEN_FRONT_END_UPDATES,
                  mode=MqttSendHistoryThreadMode.MODE_TWO):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))        
         self.__thread = None
         self.__status = Status.INITIAL

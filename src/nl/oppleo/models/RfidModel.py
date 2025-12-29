@@ -29,7 +29,7 @@ def RfidModel_refresh(target, context, attrs):
 """
 
 class RfidModel(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'rfid'
     
     rfid = Column(String(100), primary_key=True)
@@ -236,14 +236,13 @@ class RfidModel(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.Base cleanupSession()')
-        logger.debug("Trying to cleanup database session, called from {}".format(cn))
+        RfidModel.__logger.debug("Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            RfidModel.__logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 class RfidSchema(Schema):

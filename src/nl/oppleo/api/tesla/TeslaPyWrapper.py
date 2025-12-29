@@ -21,12 +21,11 @@ from nl.oppleo.models.KeyValueStoreModel import KeyValueStoreModel
 
 class TeslaPyWrapper:
     __KVSTORE = 'teslapy'
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __rfid = None       # Rfid unique key
     __email = None
 
     def __init__(self, rfid:str=None, email:str=None):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
         self.__logger.debug('TeslaPyWrapper.__init__')
         self.__rfid=rfid

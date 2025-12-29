@@ -23,7 +23,7 @@ class ChargeSessionModel(Base):
     Charge Session Model
     """
 
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
 
     # table name
     __tablename__ = 'charge_session'  # -> sessions
@@ -683,14 +683,13 @@ class ChargeSessionModel(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.ChargeSessionModel')
-        logger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
+        ChargeSessionModel.__logger.debug(".__cleanupDbSession() - Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            ChargeSessionModel.__logger.debug(".__cleanupDbSession() - Exception trying to cleanup database session from {}".format(cn), exc_info=True)
 
 
 class ChargeSessionSchema(Schema):

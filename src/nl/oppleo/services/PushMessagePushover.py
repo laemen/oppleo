@@ -15,7 +15,7 @@ class Singleton(type):
 
 
 class PushMessagePushover(object, metaclass=Singleton):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     __API_BASE = "https://api.pushover.net/1/messages.json"
     __API_USER_VALIDATION = "https://api.pushover.net/1/users/validate.json"
@@ -31,7 +31,6 @@ class PushMessagePushover(object, metaclass=Singleton):
 
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
 

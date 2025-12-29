@@ -17,7 +17,7 @@ oppleoSystemConfig = OppleoSystemConfig()
 # generate_password_hash(password, method='sha256')
 
 class User(Base):
-    __logger: ClassVar[logging.Logger] = logging.getLogger(__name__)
+    __logger: ClassVar[logging.Logger] = logging.getLogger(f"{__name__}.{__qualname__}")
     __tablename__ = 'users'
 
     username = Column(String, primary_key=True)
@@ -53,11 +53,9 @@ class User(Base):
                             .filter(User.username == username) \
                             .first()
         except InvalidRequestError as e:
-            User.__logger = logging.getLogger('nl.oppleo.models.User') if User.__logger is None else User.__logger
             User.__cleanupDbSession(db_session, User.__class__)
         except Exception as e:
             # Nothing to roll back 
-            User.__logger = logging.getLogger('nl.oppleo.models.User') if User.__logger is None else User.__logger
             User.__logger.error("Could not query {} table in database".format(User.__tablename__ ), exc_info=True)
             raise DbException("Could not query {} table in database".format(User.__tablename__ ))
         return user
@@ -75,25 +73,34 @@ class User(Base):
             self.__logger.error("Could not commit to {} table in database".format(self.__tablename__ ), exc_info=True)
             raise DbException("Could not commit to {} table in database".format(self.__tablename__ ))
 
+    @property
     def is_active(self):
         """True, as all users are active."""
         return True
+
+    @is_active.setter
+    def is_active(self, value):
+        self._is_active = value
 
     def get_id(self):
         """Return the email address to satisfy Flask-Login's requirements."""
         return self.username
 
+    @property
     def is_authenticated(self):
         """Return True if the user is authenticated."""
         return self.authenticated
 
-    def has_enabled_2FA(self):
+    @property
+    def has_enabled_2FA(self) -> bool:
         """Return True if the 2FA is enabled."""
-        return self.enabled_2fa
+        return bool(self.enabled_2fa)
 
-    def is_2FA_local_enforced(self):
-        return self.enforce_local_2fa
+    @property
+    def is_2FA_local_enforced(self) -> bool:
+        return bool(self.enforce_local_2fa)
 
+    @property
     def is_anonymous(self):
         """False, as anonymous users aren't supported."""
         return False
@@ -118,7 +125,6 @@ class User(Base):
             # Should be only one
             return db_session.query(User).all()
         except Exception as e:
-            User.__logger = logging.getLogger('nl.oppleo.models.User') if User.__logger is None else User.__logger
             User.__logger.error("Could not query to {} table in database".format(User.__tablename__ ), exc_info=True)
         return None
 
@@ -149,11 +155,9 @@ class User(Base):
                                          .delete()
             db_session.commit()
         except InvalidRequestError as e:
-            User.__logger = logging.getLogger('nl.oppleo.models.User') if User.__logger is None else User.__logger
             User.__cleanupDbSession(db_session, User.__class__.__module__)
         except Exception as e:
             db_session.rollback()
-            User.__logger = logging.getLogger('nl.oppleo.models.User') if User.__logger is None else User.__logger
             User.__logger.error("Could not commit to {} table in database".format(User.__tablename__ ), exc_info=True)
             raise DbException("Could not commit to {} table in database".format(User.__tablename__ ))
 
@@ -164,11 +168,10 @@ class User(Base):
     """
     @staticmethod
     def __cleanupDbSession(db_session=None, cn=None):
-        logger = logging.getLogger('nl.oppleo.models.Base cleanupSession()')
-        logger.debug("Trying to cleanup database session, called from {}".format(cn))
+        User.__logger.debug("Trying to cleanup database session, called from {}".format(cn))
         try:
             db_session.remove()
             if db_session.is_active:
                 db_session.rollback()
         except Exception as e:
-            logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)
+            User.__logger.debug("Exception trying to cleanup database session from {}".format(cn), exc_info=True)

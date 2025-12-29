@@ -115,7 +115,7 @@ class OppleoConfig(object, metaclass=Singleton):
         Private variables
     """
     # OppleoConfig Logger
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __chargerConfigModel = None
     __restartRequired = False
     __upSinceDatetime = datetime.now()
@@ -153,7 +153,6 @@ class OppleoConfig(object, metaclass=Singleton):
     kWhMeter_serial = None
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.debug('Initializing Oppleo...')
         self.__chargerConfigModel = ChargerConfigModel.get_config()
 

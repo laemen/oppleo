@@ -29,11 +29,10 @@ from nl.oppleo.api.polestar.PolestarPyWrapper import PolestarPyWrapper
 """
 
 class VehicleApi:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __rfid_model = None
 
     def __init__(self, rfid_model:RfidModel=None):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.debug('VehicleApi.__init__')
         self.__rfid_model=rfid_model
 
@@ -91,7 +90,7 @@ class VehicleApi:
         self.__logger.warning("authorizeByRefreshToken() - Cannot authorize for unsupported vehicle make ({})".format(rfid_model.vehicle_make))
 
 
-    def getAuthorizationUrl(self, rfid_model:RfidModel=None, account:str=None, vehicle_make:str=None) -> str:
+    def getAuthorizationUrl(self, rfid_model:RfidModel=None, account:str=None, vehicle_make:str=None) -> str | None:
         if account is None:
             account = rfid_model.api_account if rfid_model is not None else ( self.__rfid_model.api_account if self.__rfid_model is not None else None )
         if account is None:

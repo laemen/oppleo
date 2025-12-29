@@ -28,14 +28,13 @@ modbusConfigOptions = [ SDM630v2, SDM120 ]
 
 
 class EnergyModbusReader:
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     energy_device_id = None
     instrument = None
     appSocketIO = None
     modbusConfig = None
  
     def __init__(self, energy_device_id, appSocketIO=None):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         self.energy_device_id = energy_device_id
         self.appSocketIO = appSocketIO

@@ -73,13 +73,14 @@ oppleoConfig = OppleoConfig()
 """
 
 class RGBLedControllerThread(object):
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
+
     PWM_FREQ = 100                      #
     MAX_SLEEP_TIME = .2                 # Check 5x per second for status updates, including short error pulse
     CHARGE_LED_PULSE_FREQUENCY = 2      # Frequency of led pulses
     ERROR_LED_SWITCH_FREQUENCY = 2      # Frequency of led pulses
     ERROR_FLASH_DURATION_MILLIS = 400   # Duration in millisec of an Error Flash (card rejected etc.)
 
-    __logger = None
     thread = None
     threadLock = None
     stopEvent = None
@@ -152,7 +153,6 @@ class RGBLedControllerThread(object):
     def __init__(self):
         global oppleoConfig
 
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
         self.resetLedEffects()

@@ -45,7 +45,7 @@ class Singleton(type):
 
 
 class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     # functional syntax
     STATES = Enum('Status', ['CONNECTED', 'DISCONNECTED', 'CONNECT_FAILED', 'UNREACHABLE', 'NOT_AUTHORIZED', 'OTHER'])
     state = Enum('Status', ['OTHER']).OTHER
@@ -79,7 +79,6 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
     def __init__(self) -> None:
         super().__init__()
 
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
         self.__thread = None

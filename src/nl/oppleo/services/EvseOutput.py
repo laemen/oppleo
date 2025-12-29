@@ -18,13 +18,11 @@ class Singleton(type):
 
 
 class EvseOutputGenerator(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     threadLock = None
 
     def __init__(self):
         global oppleoConfig, modulePresence
-
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
         self.threadLock = threading.Lock()
@@ -100,11 +98,10 @@ class EvseOutputGenerator(object):
 
 
 class EvseOutputSimulator(object):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     __simulatedEvseOutputState = False
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
 
     def switch_on(self):
@@ -124,12 +121,11 @@ class EvseOutputSimulator(object):
   ON in off-peak hours before it actually is switched on.
 """
 class EvseOutput(object, metaclass=Singleton):
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
     evseOutput = None
     isOffPeak = False
 
     def __init__(self):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))   
         if oppleoSystemConfig.evseSwitchEnabled:
             self.__logger.debug("Using real Evse Output Generator")

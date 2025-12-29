@@ -40,8 +40,7 @@ oppleoConfig = OppleoConfig()
 """
 
 class EnergyModbusReaderSimulator():
-
-    __logger = None
+    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
     __energy_device_id = None
     __appSocketIO = None
@@ -77,7 +76,6 @@ class EnergyModbusReaderSimulator():
 
 
     def __init__(self, energy_device_id=None, appSocketIO=None):
-        self.__logger = logging.getLogger(self.__class__.__module__)
         self.__logger.setLevel(level=oppleoSystemConfig.getLogLevelForModule(self.__class__.__module__))
 
         self.__energy_device_id = energy_device_id

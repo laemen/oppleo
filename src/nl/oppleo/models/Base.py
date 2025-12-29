@@ -34,7 +34,7 @@ oppleoSystemConfig.sqlalchemy_session = DbSession
 
 
 def init_db():
-    logger = logging.getLogger('nl.oppleo.models.Base init_db()')
+    __logger = logging.getLogger(f"{__name__}")
 
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
@@ -50,7 +50,7 @@ def init_db():
         Base.metadata.create_all(bind=engine)
         oppleoSystemConfig.dbAvailable = True
     except:
-        logger.error('COULD NOT CONNECT TO DATABASE!!!')
+        __logger.error('COULD NOT CONNECT TO DATABASE!!!')
         print('COULD NOT CONNECT TO DATABASE!!!')
         raise DbException('Database connection failed')
 
