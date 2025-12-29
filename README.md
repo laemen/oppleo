@@ -1,5 +1,9 @@
 # Oppleo
 
+
+<span style="color:red">❌ NOTE: This is a continuation of ilseh/Oppleo, upgrading software package levels and moving from Raspbian Buster to Raspberry OS 64bit on Raspberry Pi 5 4GB, updating Python from 3.9 to 3.14, updating liquibase, PostgreSQL etc. to recent versions.
+Work in progress, also this readme is not updated yet.</span>
+
 ![Oppleo Dashboard](src/nl/oppleo/webapp/static/images/about_dashboard.png)
 
 The Oppleo software package aims to provide additional functionality to extend a basic SmartEVSE based car charger adding RFID tags, a buzzer and LED, an online web front with basic authentication, kWh meter loggin to a database, off-peak charging, and Excel and PDF charge reports.
