@@ -1,3 +1,14 @@
+Version 1.9             2026-01-01
+
+Added
+- Upgrades packages. Moved Repo to laemen/Oppleo
+
+Fixed
+- Raspberry OS Trixie support
+- Python 14 support. Updated packages support.
+- Improved database stabilization.
+- Updates liquibase, PostgreSQL 17 
+
 Version 1.8             2025-12-01
 
 Added
