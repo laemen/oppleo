@@ -320,7 +320,7 @@ class OffPeakHoursModel(Base):
                         OffPeakHoursModel.__logger.debug('OffPeak weekday {} config has entries double covering')
                     else:
                         # Section completely doubles previous peak section, definately not handling this correctly
-                        OffPeakHoursModel.__logger.warn('OffPeak weekday {} completely double covering entries not interpreted correctly')
+                        OffPeakHoursModel.__logger.warning('OffPeak weekday {} completely double covering entries not interpreted correctly')
                 else:
                     # Was previous period off peak?
                     if repr[-1]['offPeak']:
@@ -329,7 +329,7 @@ class OffPeakHoursModel(Base):
                         repr[-1]['offPeak']['diffMins'] = OffPeakHoursModel.diffMins(repr[-1]['offPeak']['end'], repr[-1]['offPeak']['start'])
                     else:
                         # Section partly doubles previous peak section, definately not handling this correctly
-                        OffPeakHoursModel.__logger.warn('OffPeak weekday {} partly double covering entries not interpreted correctly')
+                        OffPeakHoursModel.__logger.warning('OffPeak weekday {} partly double covering entries not interpreted correctly')
                 pass
             # Move to next section
             section_start_time = section_start_time.replace(hour=op_entry.off_peak_end.hour, minute=op_entry.off_peak_end.minute)

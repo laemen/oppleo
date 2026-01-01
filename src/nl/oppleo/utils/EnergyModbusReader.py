@@ -104,7 +104,7 @@ class EnergyModbusReader:
                         )
                     )     
             else:
-                self.__logger.warn('modbusConfig serialNumber type {} not supported!'.format(self.modbusConfig[MB.SN][MB.TYPE]))
+                self.__logger.warning('modbusConfig serialNumber type {} not supported!'.format(self.modbusConfig[MB.SN][MB.TYPE]))
                 self.oppleoConfig.kWhMeterSerial = 99999999
         else:
             self.oppleoConfig.kWhMeterSerial = 99999999
@@ -136,7 +136,7 @@ class EnergyModbusReader:
                 1
                 )
         else:
-            self.__logger.warn('modbusConfig total_kWh type {} not supported!'.format(self.modbusConfig[MB.TOTAL_ENERGY][MB.TYPE]))
+            self.__logger.warning('modbusConfig total_kWh type {} not supported!'.format(self.modbusConfig[MB.TOTAL_ENERGY][MB.TYPE]))
             return 0
 
 
@@ -147,7 +147,7 @@ class EnergyModbusReader:
             self.__logger.debug("Modbus element {} not enabled".format(name))
             return 0
         if el[MB.TYPE] != MB.TYPE_FLOAT:
-            self.__logger.warn("Type {} for modbus element {} not supported (must be {})".format(el[MB.TYPE], name, MB.TYPE_FLOAT))
+            self.__logger.warning("Type {} for modbus element {} not supported (must be {})".format(el[MB.TYPE], name, MB.TYPE_FLOAT))
             return 0
         return round(self.try_read_float( 
                             value_desc=name, 

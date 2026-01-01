@@ -36,7 +36,7 @@ class RfidReader(object):
         global modulePresence
         
         if modulePresence.OppleoMFRC522_IsStub:
-            self.__logger.warn("Reading from stub (don't expect reading any values)")
+            self.__logger.warning("Reading from stub (don't expect reading any values)")
 
         # OppleoMFRC522() read() does not lock other threads, no need to call read_no_block() instead to yield
         # This call returns with id when an rfid tag was detected
@@ -51,7 +51,7 @@ class RfidReader(object):
         global oppleoConfig, modulePresence
         
         if modulePresence.SimpleMFRC522_IsStub:
-            self.__logger.warn("Reading from stub (don't expect reading any values)")
+            self.__logger.warning("Reading from stub (don't expect reading any values)")
 
         # SimpleMFRC522() read() blocks other threads, call read_no_block() instead to yield to other threads.
         while True:
@@ -75,7 +75,7 @@ class RfidReader(object):
         global modulePresence
 
         if modulePresence.OppleoMFRC522_IsStub:
-            self.__logger.warn("Reading from stub (don't expect reading any values)")
+            self.__logger.warning("Reading from stub (don't expect reading any values)")
             return {}
 
         return modulePresence.OppleoMFRC522.oLog.to_str()

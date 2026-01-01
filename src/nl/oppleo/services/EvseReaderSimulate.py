@@ -51,13 +51,13 @@ class EvseReaderSimulate(object):
         global oppleoConfig
 
         cb_result(EvseState.EVSE_STATE_UNKNOWN)
-        self.__logger.warn('Simulated Evse Read loop!')
+        self.__logger.warning('Simulated Evse Read loop!')
         while not cb_until():
 
             self.__openSession = ChargeSessionModel.getOpenChargeSession(oppleoConfig.chargerID)
 
             if self.__openSession is None and self.__current_state != EvseState.EVSE_STATE_INACTIVE:
-                self.__logger.warn('SIMULATE EVSE state change to INACTIVE!')
+                self.__logger.warning('SIMULATE EVSE state change to INACTIVE!')
                 self.__current_state = EvseState.EVSE_STATE_INACTIVE
                 cb_result(EvseState.EVSE_STATE_INACTIVE)
 
@@ -67,11 +67,11 @@ class EvseReaderSimulate(object):
                 self.__logger.debug('Simulated Evse Read loop!')
 
                 if minute in [0, 3, 6, 8] and self.__current_state != EvseState.EVSE_STATE_CONNECTED:
-                    self.__logger.warn('SIMULATE EVSE state change to CONNECTED!')
+                    self.__logger.warning('SIMULATE EVSE state change to CONNECTED!')
                     self.__current_state = EvseState.EVSE_STATE_CONNECTED
                     cb_result(EvseState.EVSE_STATE_CONNECTED)
                 if minute in [1, 2, 4, 5, 7, 9] and self.__current_state != EvseState.EVSE_STATE_CHARGING:
-                    self.__logger.warn('SIMULATE EVSE state change to CHARGING!')
+                    self.__logger.warning('SIMULATE EVSE state change to CHARGING!')
                     self.__current_state = EvseState.EVSE_STATE_CHARGING
                     cb_result(EvseState.EVSE_STATE_CHARGING)
 

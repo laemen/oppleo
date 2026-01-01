@@ -115,7 +115,7 @@ class PolestarPyWrapper:
             self.__logger.warning("authorizeByUsernamePassword() - Cannot authorize - no username.")
             return False
         if password is None:
-            self.__logger.warn("authorizeByUsernamePassword() - Cannot authorize - no password.")
+            self.__logger.warning("authorizeByUsernamePassword() - Cannot authorize - no password.")
             return False
         # Establish account
         self.__api = PolestarApi(username=username, password=password)

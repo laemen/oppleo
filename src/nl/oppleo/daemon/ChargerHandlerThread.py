@@ -122,7 +122,7 @@ class ChargerHandlerThread(object):
 
         rfidData = RfidModel.get_one(rfid)
         if rfidData is None:
-            self.__logger.warn("Unknown rfid offered ({}). Access denied and rfid value saved in db.".format(rfid))
+            self.__logger.warning("Unknown rfid offered ({}). Access denied and rfid value saved in db.".format(rfid))
             newRfid = RfidModel()
             newRfid.set({"rfid": rfid})
             newRfid.save()
@@ -514,7 +514,7 @@ class ChargerHandlerThread(object):
                     charge_session = ChargeSessionModel.get_open_charge_session_for_device(self.device)
                     if charge_session is None:
                         # No open charge session found
-                        self.__logger.warn(".handle_auto_session() - was expecting an open charge session to close...")
+                        self.__logger.warning(".handle_auto_session() - was expecting an open charge session to close...")
                     else:
                         # Open charge session, try to detect the last power consumption
                         self.end_charge_session(charge_session, True)
@@ -581,7 +581,7 @@ class ChargerHandlerThread(object):
                 if rfidObj is not None:
                     self.__logger.debug('.energyUpdate() retrieved RFID (name={}, id={}'.format(rfidObj.name, rfidObj.rfid))
                 else:
-                    self.__logger.warn('.energyUpdate() retrieving RFID failed!!!')
+                    self.__logger.warning('.energyUpdate() retrieving RFID failed!!!')
                 homeAssistantMqttHandlerThread.sessionUpdate(energy=open_charge_session_for_device.total_energy,
                                                              cost=open_charge_session_for_device.total_price,
                                                              end_value=open_charge_session_for_device.end_value,

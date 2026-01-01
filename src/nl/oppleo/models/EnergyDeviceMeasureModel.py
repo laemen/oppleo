@@ -302,7 +302,7 @@ class EnergyDeviceMeasureModel(Base):
         
         energy_now = self.get_last_saved(energy_device_id)
         if energy_now is None or energy_at_ts is None:
-            self.__logger.warn('get_usage_since() - could not get data from database')
+            self.__logger.warning('get_usage_since() - could not get data from database')
             return 0
         energy_used = round((energy_now.kw_total - energy_at_ts.kw_total) *10) /10
         self.__logger.debug('get_usage_since() - since {} usage {}kWh'.format(

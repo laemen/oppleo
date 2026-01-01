@@ -117,7 +117,7 @@ class EnergyModbusReaderSimulator():
         return round( random.uniform(min, max), decimals )
 
     def getMeasurementValue(self):
-        self.__logger.warn('Simulator environment, getting simulated measurement')
+        self.__logger.warning('Simulator environment, getting simulated measurement')
         now = time.time()
         secondsPassed = now - self.__lasttime
         self.__l1_e_u = self.__l1_e_u + ( (secondsPassed/ 3600) * (self.__l1_p /1000) )
@@ -160,16 +160,16 @@ class EnergyModbusReaderSimulator():
         return reading
 
     def getTotalKWHHValue(self):
-        self.__logger.warn('Simulator environment, getting simulated data')
+        self.__logger.warning('Simulator environment, getting simulated data')
         return self.__l1_e + self.__l2_e + self.__l3_e
 
     def initInstrument(self):
-        self.__logger.warn('Simulator environment, initiating simulator')
+        self.__logger.warning('Simulator environment, initiating simulator')
         self.readSerialNumber()
 
     def readSerialNumber(self, port_name=None, slave_address=None):
         global oppleoConfig
 
-        self.__logger.warn('Simulator environment, getting simulated serial number')
+        self.__logger.warning('Simulator environment, getting simulated serial number')
         oppleoConfig.kWhMeterSerial = 99999999
         return oppleoConfig.kWhMeterSerial

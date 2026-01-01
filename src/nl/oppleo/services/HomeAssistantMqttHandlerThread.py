@@ -291,7 +291,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
                 if homeAssistantMqttHandlerThread.isConnected or \
                    homeAssistantMqttHandlerThread.state != homeAssistantMqttHandlerThread.STATES.NOT_AUTHORIZED:
                     homeAssistantMqttHandlerThread.isConnected = False
-                    homeAssistantMqttHandlerThread.__logger.warn("Connecting to HomeAssistant MQTT Broker failed (NOT AUTHORIZED) [1 rc={rc}].".format(rc=rc))
+                    homeAssistantMqttHandlerThread.__logger.warning("Connecting to HomeAssistant MQTT Broker failed (NOT AUTHORIZED) [1 rc={rc}].".format(rc=rc))
                     homeAssistantMqttHandlerThread.state = homeAssistantMqttHandlerThread.STATES.NOT_AUTHORIZED
                     oppleoSystemConfig.homeAssistantMqttEnabled = False
                     OutboundEvent.triggerEvent(
@@ -304,7 +304,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
             else:
                 if homeAssistantMqttHandlerThread.isConnected or homeAssistantMqttHandlerThread.state != homeAssistantMqttHandlerThread.STATES.CONNECT_FAILED:
                     homeAssistantMqttHandlerThread.isConnected = False
-                    homeAssistantMqttHandlerThread.__logger.warn("Connecting to HomeAssistant MQTT Broker failed [1 rc={rc}].".format(rc=rc))
+                    homeAssistantMqttHandlerThread.__logger.warning("Connecting to HomeAssistant MQTT Broker failed [1 rc={rc}].".format(rc=rc))
                     homeAssistantMqttHandlerThread.state = homeAssistantMqttHandlerThread.STATES.CONNECT_FAILED
                     OutboundEvent.triggerEvent(
                             event='ha_mqtt_status_update', 
@@ -320,7 +320,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
             if homeAssistantMqttHandlerThread.isConnected or \
                 homeAssistantMqttHandlerThread.state not in [homeAssistantMqttHandlerThread.STATES.DISCONNECTED, 
                                                             homeAssistantMqttHandlerThread.STATES.NOT_AUTHORIZED]:
-                homeAssistantMqttHandlerThread.__logger.warn("Disconnected from HomeAssistant MQTT Broker [rc={rc}].".format(rc=rc))
+                homeAssistantMqttHandlerThread.__logger.warning("Disconnected from HomeAssistant MQTT Broker [rc={rc}].".format(rc=rc))
                 homeAssistantMqttHandlerThread.isConnected = False
                 homeAssistantMqttHandlerThread.state = homeAssistantMqttHandlerThread.STATES.DISCONNECTED
                 OutboundEvent.triggerEvent(
@@ -335,7 +335,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
         def __on_connect_fail__(client, userdata, rc):
             homeAssistantMqttHandlerThread = HomeAssistantMqttHandlerThread()
             if homeAssistantMqttHandlerThread.isConnected or homeAssistantMqttHandlerThread.state != homeAssistantMqttHandlerThread.STATES.CONNECT_FAILED:
-                homeAssistantMqttHandlerThread.__logger.warn("Connecting to HomeAssistant MQTT Broker failed [2 rc={rc}].".format(rc=rc))
+                homeAssistantMqttHandlerThread.__logger.warning("Connecting to HomeAssistant MQTT Broker failed [2 rc={rc}].".format(rc=rc))
                 homeAssistantMqttHandlerThread.isConnected = False
                 homeAssistantMqttHandlerThread.state = homeAssistantMqttHandlerThread.STATES.CONNECT_FAILED
                 OutboundEvent.triggerEvent(
@@ -387,7 +387,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
                         public=False
                     )
                 else:
-                    homeAssistantMqttHandlerThread.__logger.warn("HomeAssistant MQTT Broker - BLWT message {msg} not understood (expecting online or offline)".format(msg=message.payload.decode("utf-8")))
+                    homeAssistantMqttHandlerThread.__logger.warning("HomeAssistant MQTT Broker - BLWT message {msg} not understood (expecting online or offline)".format(msg=message.payload.decode("utf-8")))
                     homeAssistantMqttHandlerThread.ha_state = homeAssistantMqttHandlerThread.__HA_STATES.UNKNOWN
                     OutboundEvent.triggerEvent(
                         event='ha_mqtt_ha_status', 
@@ -405,9 +405,9 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
             try:
                 key = message.topic.split('/')[2].split('_')[1] 
             except Exception as e:
-                homeAssistantMqttHandlerThread.__logger.warn("HomeAssistant MQTT Broker - message - could not process key from topic [topic={topic}].".format(topic=message.topic))
+                homeAssistantMqttHandlerThread.__logger.warning("HomeAssistant MQTT Broker - message - could not process key from topic [topic={topic}].".format(topic=message.topic))
 
-            homeAssistantMqttHandlerThread.__logger.warn("HomeAssistant MQTT Broker - message [key={key}].".format(key=key))
+            homeAssistantMqttHandlerThread.__logger.warning("HomeAssistant MQTT Broker - message [key={key}].".format(key=key))
             if key == "Token":
                 homeAssistantMqttHandlerThread.__logger.debug("HomeAssistant MQTT Broker - Request to switch token to {rToken}...".format(rToken=message.payload.decode("utf-8")))
 
@@ -415,7 +415,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
                 openChargeSession = ChargeSessionModel.getOpenChargeSession(device=oppleoConfig.chargerID)
                 if openChargeSession is not None:
                     # A session is active, the token cannot be switched - switch back
-                    homeAssistantMqttHandlerThread.__logger.warn("HomeAssistant MQTT Broker - cannot switch to token {rToken} during active charge session.".format(rToken=message.payload.decode("utf-8")))
+                    homeAssistantMqttHandlerThread.__logger.warning("HomeAssistant MQTT Broker - cannot switch to token {rToken} during active charge session.".format(rToken=message.payload.decode("utf-8")))
                     homeAssistantMqttHandlerThread.publish({'Token': (openChargeSession.rfid.name if openChargeSession.rfid.name != None and openChargeSession.rfid.name != "" else openChargeSession.rfid.rfid)})
                     return
                 
@@ -430,7 +430,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
 
                 # If not found there is a consistency issue, revert
                 if selectedRfid is None:
-                    homeAssistantMqttHandlerThread.__logger.warn("HomeAssistant MQTT Broker - cannot switch to non exixstend token {rToken}.".format(rToken=message.payload.decode("utf-8")))
+                    homeAssistantMqttHandlerThread.__logger.warning("HomeAssistant MQTT Broker - cannot switch to non exixstend token {rToken}.".format(rToken=message.payload.decode("utf-8")))
                     self.__selectedToken = None
                     return
 
@@ -473,7 +473,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
                                     port = oppleoSystemConfig.homeAssistantMqttPort,
                                     keepalive = self.keepalive)
         except socket.timeout:
-            self.__logger.warn("Socket timeout connecting to HomeAssistant MQTT Broker...")
+            self.__logger.warning("Socket timeout connecting to HomeAssistant MQTT Broker...")
             if self.state != self.STATES.UNREACHABLE:
                 self.state = self.STATES.UNREACHABLE
                 OutboundEvent.triggerEvent(
@@ -507,7 +507,7 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
         self.__logger.debug("Sending Auto-Discover config messages to HomeAssistant MQTT Broker...")
 
         if not self.isConnected:
-            self.__logger.warn("Cannot send Auto-Discover config messages to HomeAssistant MQTT Broker, not connected.")
+            self.__logger.warning("Cannot send Auto-Discover config messages to HomeAssistant MQTT Broker, not connected.")
             return False
 
         r = Raspberry()
@@ -608,13 +608,13 @@ class HomeAssistantMqttHandlerThread(object, metaclass=Singleton):
         self.__logger.debug(f'Publish msg {message} to HomeAssistant topic {topic} ... ')
 
         if not self.isConnected:
-            self.__logger.warn("Cannot publish status message to HomeAssistant MQTT Broker, not connected.")
+            self.__logger.warning("Cannot publish status message to HomeAssistant MQTT Broker, not connected.")
             return False
 
         # Can be async connected, with self.mqttClient.is_connected() returning false...
 
         #        if not self.mqttClient.is_connected():
-        #            OppleoMqttClient.__logger.warn(f'Failed to publish msg {message} to topic {topic}, not connected')
+        #            OppleoMqttClient.__logger.warning(f'Failed to publish msg {message} to topic {topic}, not connected')
         #            return False
             
         self.__logger.debug(f'Publishing HomeAssistant MQTT msg {message} to topic {topic}')

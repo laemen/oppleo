@@ -43,7 +43,7 @@ class EnergyDevice():
         if not self.enabled:
             if self.simulate:
                 # Create simulator device
-                self.__logger.warn("Using SIMULATOR for energyModbusReader!!!")
+                self.__logger.warning("Using SIMULATOR for energyModbusReader!!!")
                 self.energyModbusReader = EnergyModbusReaderSimulator(
                                                 energy_device_id=self.energy_device_id,
                                                 appSocketIO=self.appSocketIO
@@ -58,7 +58,7 @@ class EnergyDevice():
                                             appSocketIO=self.appSocketIO
                                             )
         except Exception as e:
-            self.__logger.warn("Could not start energyModbusReader for {} - {}".format(self.energy_device_id, str(e)))
+            self.__logger.warning("Could not start energyModbusReader for {} - {}".format(self.energy_device_id, str(e)))
 
 
     def handleIfTimeTo(self):
@@ -89,7 +89,7 @@ class EnergyDevice():
             self.createEnergyModbusReader()
             if self.energyModbusReader is None:
                 # still nothing
-                self.__logger.warn("Cannot read energy device. No working modbus reader for {}".format(self.energy_device_id))
+                self.__logger.warning("Cannot read energy device. No working modbus reader for {}".format(self.energy_device_id))
                 return
 
         data = self.energyModbusReader.getMeasurementValue()

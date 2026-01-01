@@ -100,7 +100,7 @@ class EvseReaderProd:
         GPIO = modulePresence.GPIO
 
         if GPIO is None:
-            self.__logger.warn("EVSE LED Reader is enabled but GPIO is not loaded (config error).")
+            self.__logger.warning("EVSE LED Reader is enabled but GPIO is not loaded (config error).")
             cb_result(EvseState.EVSE_STATE_UNKNOWN)
             while not cb_until():
                 # Loop here untill done

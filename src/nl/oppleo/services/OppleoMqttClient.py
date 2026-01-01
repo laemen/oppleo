@@ -68,7 +68,7 @@ class OppleoMqttClient(object, metaclass=Singleton):
         # Can be async connected, with self.mqttClient.is_connected() returning false...
 
         #        if not self.mqttClient.is_connected():
-        #            OppleoMqttClient.__logger.warn(f'Failed to publish msg {message} to topic {topic}, not connected')
+        #            OppleoMqttClient.__logger.warning(f'Failed to publish msg {message} to topic {topic}, not connected')
         #            return False
             
         OppleoMqttClient.__logger.debug(f'Publishing MQTT msg {message} to topic {topic}')

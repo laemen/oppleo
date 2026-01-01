@@ -123,10 +123,10 @@ class TokenMediator:
     def release(self, token, key) -> bool:
         with self.__lock:
             if token not in self.__tokens:
-                self.__logger.warn('release() - Request to release unregistered token (token={}, key={})'.format(token, key))
+                self.__logger.warning('release() - Request to release unregistered token (token={}, key={})'.format(token, key))
                 return False
             if self.__tokens[token].key != key:
-                self.__logger.warn('release() - Request to release token with invalid key (token={}, key={}, ref={})'.format(token, key, self.__tokens[token].ref))
+                self.__logger.warning('release() - Request to release token with invalid key (token={}, key={}, ref={})'.format(token, key, self.__tokens[token].ref))
                 return False
             self.__tokens[token].inUse = False
             self.__logger.debug('release() - Token released (token={}, key={}, ref={})'.format(token, key, self.__tokens[token].ref))

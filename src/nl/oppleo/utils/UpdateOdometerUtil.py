@@ -114,7 +114,7 @@ class UpdateOdometerUtil:
         # Did the token still work?
         if not vApi.isAuthorized():
             # Nah, report
-            self.__logger.warn('Token not authorizing. Removing authorization (token)')
+            self.__logger.warning('Token not authorizing. Removing authorization (token)')
             vApi.logout()
 
             rfid_model.cleanupVehicleInfo()

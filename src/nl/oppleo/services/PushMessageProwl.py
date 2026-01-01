@@ -52,16 +52,16 @@ class PushMessageProwl(object, metaclass=Singleton):
             )
             self.__logger.debug("Result {} - {} ".format(r.status_code, r.reason))
             if r.status_code != self.HTTP_200_OK:
-                self.__logger.warn("self.sendMessage(): status code {} not Ok!".format(r.status_code))
+                self.__logger.warning("self.sendMessage(): status code {} not Ok!".format(r.status_code))
 
         except requests.exceptions.ConnectTimeout as ct:
-            self.__logger.warn("self.sendMessage(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.sendMessage(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
             return False
         except requests.ReadTimeout as rt:
-            self.__logger.warn("self.sendMessage(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.sendMessage(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
             return False
         except Exception as e:
-            self.__logger.warn("self.sendMessage(): Exception {} not Ok!".format(e))
+            self.__logger.warning("self.sendMessage(): Exception {} not Ok!".format(e))
             return False
 
         return True

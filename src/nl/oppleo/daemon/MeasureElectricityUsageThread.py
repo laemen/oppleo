@@ -48,7 +48,7 @@ class MeasureElectricityUsageThread(object):
         self.__logger.info('Searching for measurement device configured in the db')
         energy_device_data = EnergyDeviceModel.get()
         if energy_device_data is None:
-            self.__logger.warn('No measurement device found!')
+            self.__logger.warning('No measurement device found!')
             return
 
         self.__logger.info('Found energy device {} (enabled={}, simulate={})'.format(energy_device_data.energy_device_id, 

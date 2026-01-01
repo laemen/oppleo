@@ -59,17 +59,17 @@ class PushMessagePushover(object, metaclass=Singleton):
             )
             self.__logger.debug("Result {} - {} ".format(r.status_code, r.reason))
             if r.status_code != self.HTTP_200_OK:
-                self.__logger.warn("self.sendMessage(): status code {} not Ok!".format(r.status_code))
+                self.__logger.warning("self.sendMessage(): status code {} not Ok!".format(r.status_code))
                 return False
 
         except requests.exceptions.ConnectTimeout as ct:
-            self.__logger.warn("self.sendMessage(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.sendMessage(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
             return False
         except requests.ReadTimeout as rt:
-            self.__logger.warn("self.sendMessage(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.sendMessage(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
             return False
         except Exception as e:
-            self.__logger.warn("self.sendMessage(): Exception {} not Ok!".format(e))
+            self.__logger.warning("self.sendMessage(): Exception {} not Ok!".format(e))
             return False
 
         return True
@@ -96,11 +96,11 @@ class PushMessagePushover(object, metaclass=Singleton):
                 return response_dict['sounds']
 
         except requests.exceptions.ConnectTimeout as ct:
-            self.__logger.warn("self.userValidation(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.userValidation(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except requests.ReadTimeout as rt:
-            self.__logger.warn("self.userValidation(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.userValidation(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except Exception as e:
-            self.__logger.warn("self.userValidation(): Exception {} not Ok!".format(e))
+            self.__logger.warning("self.userValidation(): Exception {} not Ok!".format(e))
     
         return None
 
@@ -130,11 +130,11 @@ class PushMessagePushover(object, metaclass=Singleton):
                 return resDict
 
         except requests.exceptions.ConnectTimeout as ct:
-            self.__logger.warn("self.deviceList(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.deviceList(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except requests.ReadTimeout as rt:
-            self.__logger.warn("self.deviceList(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.deviceList(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except Exception as e:
-            self.__logger.warn("self.deviceList(): Exception {} not Ok!".format(e))
+            self.__logger.warning("self.deviceList(): Exception {} not Ok!".format(e))
     
         return None
 
@@ -152,11 +152,11 @@ class PushMessagePushover(object, metaclass=Singleton):
                 return response_dict['sounds']
 
         except requests.exceptions.ConnectTimeout as ct:
-            self.__logger.warn("self.availableSounds(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.availableSounds(): ConnectTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except requests.ReadTimeout as rt:
-            self.__logger.warn("self.availableSounds(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
+            self.__logger.warning("self.availableSounds(): ReadTimeout (>{}s)".format(oppleoSystemConfig.httpTimeout))
         except Exception as e:
-            self.__logger.warn("self.availableSounds(): Exception {} not Ok!".format(e))
+            self.__logger.warning("self.availableSounds(): Exception {} not Ok!".format(e))
     
         return None
 
