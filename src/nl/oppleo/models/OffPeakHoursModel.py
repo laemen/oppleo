@@ -246,15 +246,16 @@ class OffPeakHoursModel(Base):
     def get_weekday(weekday):
         try:
             with DbSession() as db_session:
-                r = db_session.query(OffPeakHoursModel) \
-                            .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(weekday)) \
-                            .order_by(OffPeakHoursModel.off_peak_start.asc()) \
-                            .all()
-                if r is not None:
-                    for attr in inspect(OffPeakHoursModel).mapper.column_attrs:
-                        getattr(r, attr.key)
-                    db_session.expunge(r)
-                return r
+                weekdays = db_session.query(OffPeakHoursModel) \
+                                     .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(weekday)) \
+                                     .order_by(OffPeakHoursModel.off_peak_start.asc()) \
+                                     .all()
+                for weekday in weekdays:
+                    if weekday is not None:
+                        for attr in inspect(OffPeakHoursModel).mapper.column_attrs:
+                            getattr(weekday, attr.key)
+                        db_session.expunge(weekday)
+                return weekdays
         except InvalidRequestError as e:
             OffPeakHoursModel.__logger.error("Could not query from {} table in database".format(OffPeakHoursModel.__tablename__ ), exc_info=True)
         except Exception as e:
