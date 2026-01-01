@@ -111,6 +111,7 @@ class OffPeakHoursModel(Base):
     @staticmethod
     def weekdayToEnStr(weekday) -> str:
         return OffPeakHoursModel.weekday_en[weekday % len(OffPeakHoursModel.weekday_en)]
+    
     @staticmethod
     def weekdayToNlStr(weekday) -> str:
         return OffPeakHoursModel.weekday_nl[weekday % len(OffPeakHoursModel.weekday_nl)]
@@ -138,18 +139,15 @@ class OffPeakHoursModel(Base):
             return False
             
         # Weekday?
-        r = None
+        is_off_peak_on_weekday = False
         try:
             with DbSession() as db_session:
-                r = db_session.query(OffPeakHoursModel) \
-                            .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(timestamp.weekday())) \
-                            .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
-                            .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time)) \
-                            .first()
-                if r is not None:
-                    for attr in inspect(OffPeakHoursModel).mapper.column_attrs:
-                        getattr(r, attr.key)
-                    db_session.expunge(r)
+                is_off_peak_on_weekday = db_session.query(OffPeakHoursModel) \
+                                                   .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(timestamp.weekday())) \
+                                                   .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
+                                                   .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time)) \
+                                                   .first() != None
+                                
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
         except Exception as e:
@@ -157,36 +155,32 @@ class OffPeakHoursModel(Base):
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
             raise DbException("Could not query from {} table in database".format(self.__tablename__ ))
 
-        if r is not None and self.get_count(r) > 0:
+        if is_off_peak_on_weekday:
             self.__logger.debug('is_off_peak(): DayOfWeek {} within off-peak'.format(str(timestamp.strftime("%d/%m/%Y, %H:%M:%S"))))
             return True
 
         # Is this a public holiday?
-        r = None
+        is_off_peak_on_holiday = False
         try:
             with DbSession() as db_session:
-                r = db_session.query(OffPeakHoursModel) \
-                            .filter(
-                                or_(
-                                    and_(   # Specific holiday
-                                        OffPeakHoursModel.holiday_day == int(timestamp.date().day),
-                                        OffPeakHoursModel.holiday_month == int(timestamp.date().month),
-                                        OffPeakHoursModel.holiday_year == int(timestamp.date().year)
-                                    ),
-                                    and_(   # Recurring holiday
-                                        OffPeakHoursModel.holiday_day == int(timestamp.date().day),
-                                        OffPeakHoursModel.holiday_month == int(timestamp.date().month),
-                                        OffPeakHoursModel.recurring == True
-                                    )
-                                )
-                                ) \
-                            .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
-                            .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time)) \
-                            .first()
-                if r is not None:
-                    for attr in inspect(OffPeakHoursModel).mapper.column_attrs:
-                        getattr(r, attr.key)
-                    db_session.expunge(r)
+                is_off_peak_on_holiday = db_session.query(OffPeakHoursModel) \
+                                                   .filter(
+                                                        or_(
+                                                            and_(   # Specific holiday
+                                                                OffPeakHoursModel.holiday_day == int(timestamp.date().day),
+                                                                OffPeakHoursModel.holiday_month == int(timestamp.date().month),
+                                                                OffPeakHoursModel.holiday_year == int(timestamp.date().year)
+                                                            ),
+                                                            and_(   # Recurring holiday
+                                                                OffPeakHoursModel.holiday_day == int(timestamp.date().day),
+                                                                OffPeakHoursModel.holiday_month == int(timestamp.date().month),
+                                                                OffPeakHoursModel.recurring == True
+                                                            )
+                                                        )
+                                                        ) \
+                                                   .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
+                                                   .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time)) \
+                                                   .first() != None
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
         except Exception as e:
@@ -194,7 +188,7 @@ class OffPeakHoursModel(Base):
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
             raise DbException("Could not query from {} table in database".format(self.__tablename__ ))
 
-        if r is not None and self.get_count(r) > 0:
+        if is_off_peak_on_holiday:
             self.__logger.debug('is_off_peak(): Holiday {} within off-peak'.format(str(timestamp.strftime("%d/%m/%Y, %H:%M:%S"))))
             return True
 
@@ -353,7 +347,6 @@ class OffPeakHoursModel(Base):
             section_start_time = section_start_time.replace(hour=op_entry.off_peak_end.hour, minute=op_entry.off_peak_end.minute)
         return repr
 
-
     @staticmethod
     def get_all_representations_nl():
         repr = OrderedDict()
@@ -368,22 +361,8 @@ class OffPeakHoursModel(Base):
             repr[OffPeakHoursModel.weekday_en[wday.value]] = OffPeakHoursModel.get_representation(wday.value)
         return repr
 
-
-    def get_count(self, q):
-        count = 0
-        try:
-            count_q = q.statement.with_only_columns(func.count()).order_by(None)
-            count = q.session.execute(count_q).scalar()
-        except Exception as e:
-            # Nothing to roll back
-            self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
-            raise DbException("Could not query from {} table in database".format(self.__tablename__ ))
-        return count
-
-
     def __repr(self):
         return self.to_str()
-
 
     def to_str(self):
         return ({
