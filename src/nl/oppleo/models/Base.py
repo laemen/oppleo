@@ -22,7 +22,7 @@ engine = create_engine(
             pool_recycle=3600           # recycle connections after one hour
             )
 
-session_factory = sessionmaker(bind=engine)
+session_factory = sessionmaker(bind=engine, expire_on_commit=False)
 DbSession = scoped_session(session_factory)
 
 Base = declarative_base()

@@ -144,12 +144,12 @@ class ChargerConfigModel(Base):
         try:
             with DbSession() as db_session:
                 # Prevent expiration after the session is closed or object is made transient or disconnected
-                db_session.expire_on_commit = False
+                # db_session.expire_on_commit = False
                 # No need to 'add', committing this class
                 db_session.add(self)
                 db_session.commit()
                 # Keep it detached
-                make_transient(self)
+                # make_transient(self)
                 make_transient_to_detached(self)
         except InvalidRequestError as e:
             self.__logger.error(".save() - Could not commit to {} table in database".format(self.__tablename__ ), exc_info=True)
@@ -206,7 +206,7 @@ class ChargerConfigModel(Base):
         try:
             with DbSession() as db_session:
                 # Prevent expiration after the session is closed or object is made transient or disconnected
-                db_session.expire_on_commit = False
+                # db_session.expire_on_commit = False
 
                 # Should be only one, return last modified
                 ccm = db_session.query(ChargerConfigModel) \
