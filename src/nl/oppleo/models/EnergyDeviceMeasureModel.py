@@ -232,7 +232,7 @@ class EnergyDeviceMeasureModel(Base):
         try:
             with DbSession() as db_session:
                 rows = db_session.query(func.count(EnergyDeviceMeasureModel.id)).scalar()
-                return len(rows)
+                return int(rows)
 
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
