@@ -93,10 +93,11 @@ class EnergyDeviceMeasureModel(Base):
                                 .order_by(desc(EnergyDeviceMeasureModel.created_at)) \
                                 .limit(n) \
                                 .all()
-                if edmm is not None:
-                    for attr in inspect(EnergyDeviceMeasureModel).mapper.column_attrs:
-                        getattr(edmm, attr.key)
-                    db_session.expunge(edmm)
+                for edm in edmm:
+                    if edm is not None:
+                        for attr in inspect(EnergyDeviceMeasureModel).mapper.column_attrs:
+                            getattr(edm, attr.key)
+                        db_session.expunge(edm)
                 return edmm
         except InvalidRequestError as e:
             self.__logger.error("Could not save to {} table in database".format(self.__tablename__ ), exc_info=True)

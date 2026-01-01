@@ -497,10 +497,11 @@ class ChargeSessionModel(Base):
                                                 .order_by(desc(ChargeSessionModel.__table__.c.start_time)) \
                                                 .limit(n) \
                                                 .all()
-                if csm is not None:
-                    for attr in inspect(ChargeSessionModel).mapper.column_attrs:
-                        getattr(csm, attr.key)
-                    db_session.expunge(csm)
+                for cs in csm:
+                    if cs is not None:
+                        for attr in inspect(ChargeSessionModel).mapper.column_attrs:
+                            getattr(cs, attr.key)
+                        db_session.expunge(cs)
                 return csm
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
