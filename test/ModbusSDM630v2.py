@@ -28,7 +28,7 @@ instrument.serial.timeout = 1
 instrument.debug = False
 instrument.mode = minimalmodbus.MODE_RTU
 
-#print(instrument)
+print(instrument)
 
 def read_SDM630V2_meter():
   # read_float(registeraddress, functioncode=3, number_of_registers=2, byteorder=0)

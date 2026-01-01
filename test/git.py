@@ -8,7 +8,7 @@ try:
 except (RuntimeError, TypeError, ValueError, NameError) as e:
     localGitDate = None
 try:
-    remoteGitDate = datetime.strptime(os.popen('git log -1 --format=%cd origin/master').read().rstrip(), '%a %b %d %H:%M:%S %Y %z')
+    remoteGitDate = datetime.strptime(os.popen('git log -1 --format=%cd origin/main').read().rstrip(), '%a %b %d %H:%M:%S %Y %z')
 except (RuntimeError, TypeError, ValueError, NameError) as e:
     remoteGitDate = None
 

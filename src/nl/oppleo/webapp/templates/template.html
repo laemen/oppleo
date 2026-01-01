@@ -681,8 +681,8 @@
                     console.log(result)
                     switch(parseInt(result.status)) {
                     case 200:
-                        // Master update might be available, but when on a branch keep this as update truth
-                        if ( result.activeBranch != "master" && result.softwareBuildUpdateAvailable ) {
+                        // Main update might be available, but when on a branch keep this as update truth
+                        if ( result.activeBranch != "main" && result.softwareBuildUpdateAvailable ) {
                             // New build available
                             let buildVersion = result.branches.filter(branch => branch.branch == result.activeBranch)[0].version
                             $('<tr id="softwateUpdateAvailableVersionRow">' +
@@ -709,7 +709,7 @@
                             $('a#checkSoftwareStatusMenuItem').parent().hide()
                             autoHideNotify('warning', 'top-left', 'Build beschikbaar!', 'Software branch ' + result.activeBranch + ' heeft een update voor v' + buildVersion + ' met commit datum ' + result.availableBuildSoftwareDate + ' beschikbaar!', 10000)
 
-                        } else if (result.activeBranch == "master" && result.softwareReleaseUpdateAvailable) {
+                        } else if (result.activeBranch == "main" && result.softwareReleaseUpdateAvailable) {
                             // New release available
                             $('<tr id="softwateUpdateAvailableVersionRow">' +
                                 '<td class="text-dark"> Update beschikbaar:</td>' +
@@ -736,7 +736,7 @@
                             autoHideNotify('warning', 'top-left', 'Update beschikbaar!', 'Software ' + result.availableReleaseSoftwareVersion + '(' + result.availableReleaseSoftwareDate + ') beschikbaar!', 10000)
 
                         } else {
-                            if (result.activeBranch != "master" && result.softwareReleaseUpdateAvailable) {
+                            if (result.activeBranch != "main" && result.softwareReleaseUpdateAvailable) {
                                 // No build update available, however there is a new Release update available
                             }
 
@@ -744,10 +744,10 @@
                             if ( $("tr#noSoftwateUpdateAvailableRow").length == 0 ) {
                                 $('<tr id="noSoftwateUpdateAvailableRow">' +
                                     '<td class="text-dark"></td>' +
-                                    '<td class="text-secondary">Geen ' + (result.activeBranch != "master" && result.softwareReleaseUpdateAvailable ? 'developer ':'') + 'update beschikbaar' +
-                                        (result.activeBranch != "master" ? ' voor <span class="font-italic">' + result.activeBranch + '<span>' : '') +
+                                    '<td class="text-secondary">Geen ' + (result.activeBranch != "main" && result.softwareReleaseUpdateAvailable ? 'developer ':'') + 'update beschikbaar' +
+                                        (result.activeBranch != "main" ? ' voor <span class="font-italic">' + result.activeBranch + '<span>' : '') +
                                         '.' +
-                                        (result.activeBranch != "master" && result.softwareReleaseUpdateAvailable ? ' Er is een release update beschikbaar, schakel terug naar Master branch om deze te installeren.' : '') +
+                                        (result.activeBranch != "main" && result.softwareReleaseUpdateAvailable ? ' Er is een release update beschikbaar, schakel terug naar Main branch om deze te installeren.' : '') +
                                     '</td>' +
                                 '</tr>')
                                 .insertAfter("tr#softwateUpdateCurrentVersionRow")
@@ -755,7 +755,7 @@
 
                             $('button#softwateUpdateCheck').html(
                                 '<i class="fas fa-redo-alt"></i> Check ' + 
-                                    (result.activeBranch != "master" ? '<span class="font-italic">' + result.activeBranch + '<span> ' : '') +
+                                    (result.activeBranch != "main" ? '<span class="font-italic">' + result.activeBranch + '<span> ' : '') +
                                         'nogmaals '
                             )
 
@@ -763,7 +763,7 @@
                             $('button#softwateUpdateCheck').toggleClass('btn-outline-secondary', true)
 
                             autoHideNotify('success', 'top-left', 'Up to date!', 'Oppleo is up-to-date. Er is geen nieuwere software beschikbaar' +
-                                (result.activeBranch != "master" ? ' voor developer branch ' + result.activeBranch : '') +                            
+                                (result.activeBranch != "main" ? ' voor developer branch ' + result.activeBranch : '') +                            
                                 '.')
                         }
                         break
@@ -1678,7 +1678,7 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <h6 class="font-italic font-weight-light">
-                    Versie <a href="https://github.com/ilseh/Oppleo" target="_new">{{ changelog.currentVersion }}</a>,
+                    Versie <a href="https://github.com/laemen/Oppleo" target="_new">{{ changelog.currentVersion }}</a>,
                     {{ changelog.currentVersionDateStr(changelog.nl_NL) }} 
                     <i class="far fa-copyright"></i> 2019 - {{ now.year }} <a href="https://oppleo.nl/" target="_new">Oppleo.nl</a>
                     </h6>

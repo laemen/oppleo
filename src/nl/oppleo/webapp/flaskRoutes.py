@@ -3107,11 +3107,11 @@ def systemStatus():
 """
 
 # Always returns json
-@flaskRoutes.route("/software_status", defaults={'branch': 'master'}, strict_slashes=False, methods=["GET"])
+@flaskRoutes.route("/software_status", defaults={'branch': 'main'}, strict_slashes=False, methods=["GET"])
 @flaskRoutes.route("/software_status/<path:branch>", methods=["GET"])
 @flaskRoutes.route("/software_status/<path:branch>/", methods=["GET"])
 @authenticated_resource  # CSRF Token is valid
-def softwareStatus(branch='master'):
+def softwareStatus(branch='main'):
     global flaskRoutesLogger, oppleoConfig
     flaskRoutesLogger.debug('/software_status/{}'.format(branch))
 
@@ -3141,7 +3141,7 @@ def softwareStatus(branch='master'):
                 'versionDate': changeLog.versionDateStr(versionDate=versionDate) if versionDate is not None else 'null', 
                 'gitDate' : GitUtil.lastBranchGitDate(branch=branchName, remote=True)
                 })
-            if branchName == 'master':
+            if branchName == 'main':
                 availableReleaseSoftwareVersion = str(versionNumber) if versionNumber is not None else '0.0.0'
 
     """
@@ -3150,9 +3150,9 @@ def softwareStatus(branch='master'):
     """
     return jsonify({
         'status': HTTP_CODE_200_OK, 
-        'softwareReleaseUpdateAvailable'    : GitUtil.gitUpdateAvailable(),         # default on master
-        'availableReleaseSoftwareDate'      : GitUtil.lastRemoteMasterGitDateStr(), # always on master
-        'availableReleaseSoftwareVersion'   : availableReleaseSoftwareVersion,      # always on master
+        'softwareReleaseUpdateAvailable'    : GitUtil.gitUpdateAvailable(),         # default on main
+        'availableReleaseSoftwareDate'      : GitUtil.lastRemoteMainGitDateStr(),   # always on main
+        'availableReleaseSoftwareVersion'   : availableReleaseSoftwareVersion,      # always on main
         'softwareBuildUpdateAvailable'      : GitUtil.gitUpdateAvailable(branch=activeBranch),
         'availableBuildSoftwareDate'        : GitUtil.lastBranchGitDateStr(branch=activeBranch, remote=True),
         'branches'                          : branches,

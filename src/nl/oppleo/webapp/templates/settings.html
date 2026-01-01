@@ -2651,14 +2651,14 @@
                             </tr>
                             <tr>
                               <th colspan="2" style="line-height: 40px;">
-                                <h4 class="m-t-0 header-title"><i class="fas fa-code-branch"></i> Software versie {% if changelog.activeBranch() != "master" %} (Developer Branch){% endif %}</h4>
+                                <h4 class="m-t-0 header-title"><i class="fas fa-code-branch"></i> Software versie {% if changelog.activeBranch() != "main" %} (Developer Branch){% endif %}</h4>
                               </th>
                             </tr>
-                            {% if changelog.activeBranch() != "master" %}
+                            {% if changelog.activeBranch() != "main" %}
                             {% set changelogs = changelog.all(changelog.nl_NL) %}
                             <tr>
                               <td class="text-dark"> Branch:</td>
-                              <td class="text-primary"><small><a href="https://github.com/ilseh/Oppleo/tree/{{ changelog.activeBranch() }}" class="font-italic text-warning font-smaller" target="_new"><i class="fas fa-external-link-alt"></i> {{ changelog.activeBranch() }}</a> (developer)</small></td>
+                              <td class="text-primary"><small><a href="https://github.com/laemen/Oppleo/tree/{{ changelog.activeBranch() }}" class="font-italic text-warning font-smaller" target="_new"><i class="fas fa-external-link-alt"></i> {{ changelog.activeBranch() }}</a> (developer)</small></td>
                             </tr>
                             <tr>
                               <td class="text-dark"> Changelog <span class="text-primary font-italic">{{ changelog.activeBranch() }}</span>:</td>
@@ -2673,19 +2673,19 @@
                               <td class="text-primary"><small>Server commit: {{ gitutil.lastBranchGitDateStr(branch=changelog.activeBranch(), remote=False) }}, Github commit: {{ gitutil.lastBranchGitDateStr(branch=changelog.activeBranch(), remote=True) }})</small></td>
                             </tr>
                             <tr>
-                              <td class="text-dark"> Changelog <span class="text-primary font-italic">master</span>:</td>
-                              {% if changelogs is not none and 'master' in changelogs and 'version' in changelogs['master'] %}
-                              <td class="text-primary">v{{ changelogs['master']['version'] }}, {{ changelogs['master']['date'] }}<small class="pr-5" style="float: right;"><a href="https://github.com/ilseh/Oppleo/blob/master/doc/changelog.txt" class="font-italic text-warning font-smaller pl-5" target="_new"><i class="fas fa-external-link-alt"></i> Change log</a></small></td>
+                              <td class="text-dark"> Changelog <span class="text-primary font-italic">main</span>:</td>
+                              {% if changelogs is not none and 'main' in changelogs and 'version' in changelogs['main'] %}
+                              <td class="text-primary">v{{ changelogs['main']['version'] }}, {{ changelogs['main']['date'] }}<small class="pr-5" style="float: right;"><a href="https://github.com/laemen/Oppleo/blob/main/doc/changelog.txt" class="font-italic text-warning font-smaller pl-5" target="_new"><i class="fas fa-external-link-alt"></i> Change log</a></small></td>
                               {% else %}
-                              <td class="text-primary"><small class="pr-5" style="float: right;"><a href="https://github.com/ilseh/Oppleo/blob/master/doc/changelog.txt" class="font-italic text-warning font-smaller pl-5" target="_new"><i class="fas fa-external-link-alt"></i> Change log</a></small></td>
+                              <td class="text-primary"><small class="pr-5" style="float: right;"><a href="https://github.com/laemen/Oppleo/blob/main/doc/changelog.txt" class="font-italic text-warning font-smaller pl-5" target="_new"><i class="fas fa-external-link-alt"></i> Change log</a></small></td>
                               {% endif %}
                             </tr>
                             <tr id="softwateUpdateCurrentVersionRow">
                               <td class="text-dark"> </td>
-                              <td class="text-primary"><small>Server commit: {{ gitutil.lastBranchGitDateStr(branch='master', remote=False) }}, Github commit: {{ gitutil.lastBranchGitDateStr(branch='master', remote=True) }})</small></td>
+                              <td class="text-primary"><small>Server commit: {{ gitutil.lastBranchGitDateStr(branch='main', remote=False) }}, Github commit: {{ gitutil.lastBranchGitDateStr(branch='main', remote=True) }})</small></td>
                             </tr>
                             {% endif %}
-                            {% if changelog.activeBranch() == "master" %}
+                            {% if changelog.activeBranch() == "main" %}
                             <tr id="softwateUpdateCurrentVersionRow">
                               <td class="text-dark"> Huidige versie:</td>
                               <td class="text-primary">v{{ changelog.currentVersion }}, {{ changelog.currentVersionDateStr(changelog.nl_NL) }}<small><a href="{{ url_for('flaskRoutes.changelog') }}" class="stay font-italic text-warning font-smaller pl-5"><i class="fas fa-external-link-alt"></i> Change log</a></small></td>
@@ -2699,7 +2699,7 @@
                                   id="softwateUpdateCheck" 
                                   class="btn btn-outline-success btn-sm waves-effect waves-light"
                                   > 
-                                  <i class='far fa-question-circle'></i> Controleer {% if changelog.activeBranch() != "master" %}{{ changelog.activeBranch() }} {% endif %}op updates 
+                                  <i class='far fa-question-circle'></i> Controleer {% if changelog.activeBranch() != "main" %}{{ changelog.activeBranch() }} {% endif %}op updates 
                                 </button>                                
                               </td>
                             </tr>

@@ -319,7 +319,7 @@ Oppleo is not a nicely packaged resource. Basically you'll pull the developer co
 * Clone the __Oppleo__ repo in the `/home/pi` folder (note: get the URL from the Clone or Download button above!)
   >
   ```bash
-  git clone https://github.com/ilseh/Oppleo.git
+  git clone https://github.com/laemen/Oppleo.git
   ```
 
 * Move into the Oppleo directory

@@ -8,8 +8,8 @@ import logging
 class GitUtil(object):
     __logger = logging.getLogger(f"{__name__}.{__qualname__}")
 
-    GIT_OPPLEO_CHANGELOG_URL = 'https://raw.githubusercontent.com/ilseh/Oppleo/{branch}/doc/changelog.txt'
-    DEFAULT_BRANCH = "master"
+    GIT_OPPLEO_CHANGELOG_URL = 'https://raw.githubusercontent.com/laemen/Oppleo/{branch}/doc/changelog.txt'
+    DEFAULT_BRANCH = "main"
     HTTP_TIMEOUT = 5    # 30
 
     HTTP_200_OK = 200
@@ -18,7 +18,7 @@ class GitUtil(object):
 
     # Returns a datetime object of the latest Git refresh
     @staticmethod
-    def lastBranchGitDate(branch:str="master", remote:bool=False) -> Optional[datetime]:
+    def lastBranchGitDate(branch:str="main", remote:bool=False) -> Optional[datetime]:
         # Wed Jul 22 15:40:45 2020 +0200\n
         if not isinstance(branch, str):
             return None
@@ -35,21 +35,21 @@ class GitUtil(object):
             return None
 
     @staticmethod
-    def lastBranchGitDateStr(branch:str="master", remote:bool=False) -> Optional[str]:
+    def lastBranchGitDateStr(branch:str="main", remote:bool=False) -> Optional[str]:
         d = GitUtil.lastBranchGitDate(branch=branch, remote=remote)
         return (str(d.strftime("%d/%m/%Y, %H:%M:%S")) if (d is not None) else "Onbekend")
 
     # Returns a datetime object of the latest Git refresh
     @staticmethod
-    def lastRemoteMasterGitDate() -> Optional[datetime]:
-        return GitUtil.lastBranchGitDate(branch="master", remote=True)
+    def lastRemoteMainGitDate() -> Optional[datetime]:
+        return GitUtil.lastBranchGitDate(branch="main", remote=True)
 
     @staticmethod
-    def lastRemoteMasterGitDateStr() -> Optional[str]:
-        return GitUtil.lastBranchGitDateStr(branch="master", remote=True)
+    def lastRemoteMainGitDateStr() -> Optional[str]:
+        return GitUtil.lastBranchGitDateStr(branch="main", remote=True)
 
     @staticmethod
-    def gitUpdateAvailable(branch:str="master") -> Optional[bool]:
+    def gitUpdateAvailable(branch:str="main") -> Optional[bool]:
         localGitDate = GitUtil.lastBranchGitDate(branch=branch, remote=False) 
         remoteGitDate = GitUtil.lastBranchGitDate(branch=branch, remote=True)
         return (localGitDate is not None and remoteGitDate is not None and \
@@ -86,7 +86,7 @@ class GitUtil(object):
 
     # Get the changelog file from github for the branch
     @staticmethod
-    def getChangeLogForBranch(branch:str="master"):
+    def getChangeLogForBranch(branch:str="main"):
 
         GitUtil.__logger.debug('getChangeLogForBranch')
 

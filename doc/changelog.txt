@@ -1,7 +1,7 @@
 Version 1.9             2026-01-01
 
 Added
-- Upgrades packages. Moved Repo to laemen/Oppleo
+- Moved Repo to laemen/Oppleo, changed from master to main
 
 Fixed
 - Raspberry OS Trixie support
