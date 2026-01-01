@@ -155,6 +155,7 @@ class WebAuthNCredentialModel(Base):
                                                     .filter(WebAuthNCredentialModel.credential_owner == str(credential_owner)) \
                                                     .filter(WebAuthNCredentialModel.credential_id == str(credential_id)) \
                                                     .first()
+                db_session.expunge(registeredCredential)
                 return registeredCredential
         except InvalidRequestError as e:
             WebAuthNCredentialModel.__logger.error("Could not query from {} table in database".format(WebAuthNCredentialModel.__tablename__ ), exc_info=True)
@@ -263,6 +264,8 @@ class WebAuthNCredentialModel(Base):
                 credentialRegistrations = db_session.query(WebAuthNCredentialModel) \
                                                     .filter(WebAuthNCredentialModel.credential_owner == str(credential_owner)) \
                                                     .all()
+                for credential in credentialRegistrations:
+                    db_session.expunge(credential)
                 return credentialRegistrations
         except InvalidRequestError as e:
             WebAuthNCredentialModel.__logger.error("Could not query from {} table in database".format(WebAuthNCredentialModel.__tablename__ ), exc_info=True)
@@ -311,6 +314,7 @@ class WebAuthNCredentialModel(Base):
                                                     .filter(WebAuthNCredentialModel.credential_id == str(credential_id)) \
                                                     .filter(WebAuthNCredentialModel.credential_owner == str(username)) \
                                                     .first()
+                db_session.expunge(credentialRegistration)
                 return credentialRegistration
         except InvalidRequestError as e:
             WebAuthNCredentialModel.__logger.error("Could not query from {} table in database".format(WebAuthNCredentialModel.__tablename__ ), exc_info=True)

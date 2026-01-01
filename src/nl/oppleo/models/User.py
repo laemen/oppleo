@@ -51,6 +51,7 @@ class User(Base):
                 user = db_session.query(User) \
                                 .filter(User.username == username) \
                                 .first()
+                db_session.expunge(user)
                 return user
         except InvalidRequestError as e:
             User.__logger.error("Could not query {} table in database".format(User.__tablename__ ), exc_info=True)
@@ -121,7 +122,10 @@ class User(Base):
         try:
             with DbSession() as db_session:
                 # Should be only one
-                return db_session.query(User).all()
+                userList = db_session.query(User).all()
+                for user in userList:
+                    db_session.expunge(user)
+                return userList
         except Exception as e:
             User.__logger.error("Could not query to {} table in database".format(User.__tablename__ ), exc_info=True)
             raise DbException("Could not query to {} table in database".format(User.__tablename__ ))

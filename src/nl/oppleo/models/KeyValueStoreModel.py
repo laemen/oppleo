@@ -104,6 +104,7 @@ class KeyValueStoreModel(Base):
                                 .filter(KeyValueStoreModel.scope == scope) \
                                 .filter(KeyValueStoreModel.key == key) \
                                 .first()
+                db_session.expunge(kvsm)
                 return kvsm
         except InvalidRequestError as e:
             KeyValueStoreModel.__logger.error("Could not query from {} table in database ({})".format(KeyValueStoreModel.__tablename__, str(e)), exc_info=True)
@@ -121,6 +122,8 @@ class KeyValueStoreModel(Base):
                                 .filter(KeyValueStoreModel.kvstore == kvstore) \
                                 .filter(KeyValueStoreModel.scope == scope) \
                                 .all()
+                for kvs in kvsm:
+                    db_session.expunge(kvs)
                 return kvsm
         except InvalidRequestError as e:
             KeyValueStoreModel.__logger.error("Could not query from {} table in database".format(KeyValueStoreModel.__tablename__ ), exc_info=True)
@@ -137,6 +140,8 @@ class KeyValueStoreModel(Base):
                 kvsm = db_session.query(KeyValueStoreModel) \
                                 .filter(KeyValueStoreModel.kvstore == kvstore) \
                                 .all()
+                for kvs in kvsm:
+                    db_session.expunge(kvs)
                 return kvsm
         except InvalidRequestError as e:
             KeyValueStoreModel.__logger.error("Could not query from {} table in database".format(KeyValueStoreModel.__tablename__ ), exc_info=True)
@@ -152,6 +157,8 @@ class KeyValueStoreModel(Base):
             with DbSession() as db_session:
                 rfidm = db_session.query(KeyValueStoreModel) \
                                 .all()
+                for rfid in rfidm:
+                    db_session.expunge(rfid)
             return rfidm
         except InvalidRequestError as e:
             KeyValueStoreModel.__logger.error("Could not query from {} table in database".format(KeyValueStoreModel.__tablename__ ), exc_info=True)

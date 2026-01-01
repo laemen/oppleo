@@ -145,6 +145,7 @@ class OffPeakHoursModel(Base):
                             .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(timestamp.weekday())) \
                             .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
                             .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time))
+                db_session.expunge(r)
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
         except Exception as e:
@@ -177,6 +178,7 @@ class OffPeakHoursModel(Base):
                                 ) \
                             .filter(OffPeakHoursModel.off_peak_start <= cast(timestamp, Time)) \
                             .filter(OffPeakHoursModel.off_peak_end >= cast(timestamp, Time))
+                db_session.expunge(r)
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
         except Exception as e:
@@ -225,6 +227,7 @@ class OffPeakHoursModel(Base):
             with DbSession() as db_session:
                 r = db_session.query(OffPeakHoursModel) \
                               .all()
+                db_session.expunge(r)
                 return r
         except InvalidRequestError as e:
             self.__logger.error("Could not query from {} table in database".format(self.__tablename__ ), exc_info=True)
@@ -242,6 +245,7 @@ class OffPeakHoursModel(Base):
                             .filter(OffPeakHoursModel.weekday == OffPeakHoursModel.weekdayToEnStr(weekday)) \
                             .order_by(OffPeakHoursModel.off_peak_start.asc()) \
                             .all()
+                db_session.expunge(r)
                 return r
         except InvalidRequestError as e:
             OffPeakHoursModel.__logger.error("Could not query from {} table in database".format(OffPeakHoursModel.__tablename__ ), exc_info=True)
