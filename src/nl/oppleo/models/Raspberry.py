@@ -327,12 +327,6 @@ class Raspberry(object):
             FUNCTION_MAP = {
                 GPIO.IN: "IN",
                 GPIO.OUT: "OUT",
-                GPIO.ALT0: "ALT0",
-                GPIO.ALT1: "ALT1",
-                GPIO.ALT2: "ALT2",
-                GPIO.ALT3: "ALT3",
-                GPIO.ALT4: "ALT4",
-                GPIO.ALT5: "ALT5",
             }
 
             """
@@ -369,7 +363,7 @@ class Raspberry(object):
                         level = GPIO.input(pin)
 
                         __state[pin] = {
-                            "function": FUNCTION_MAP.get(func, "UNKNOWN"),
+                            "function": FUNCTION_MAP.get(func, "ALT/UNKNOWN"),
                             "level": "HIGH" if level else "LOW"
                         }
 
@@ -388,7 +382,7 @@ class Raspberry(object):
                         level = GPIO.input(pin)
 
                         __state[pin] = {
-                            "function": FUNCTION_MAP.get(func, "UNKNOWN"),
+                            "function": FUNCTION_MAP.get(func, "ALT/UNKNOWN"),
                             "level": "HIGH" if level else "LOW"
                         }
 
