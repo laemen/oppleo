@@ -317,23 +317,23 @@ class Raspberry(object):
         __state['gpioAvailable'] = modulePresence.gpioAvailable
         __state['gpioMode'] = oppleoConfig.gpioMode
 
-        FUNCTION_MAP = {
-            GPIO.IN: "IN",
-            GPIO.OUT: "OUT",
-            GPIO.ALT0: "ALT0",
-            GPIO.ALT1: "ALT1",
-            GPIO.ALT2: "ALT2",
-            GPIO.ALT3: "ALT3",
-            GPIO.ALT4: "ALT4",
-            GPIO.ALT5: "ALT5",
-        }
-
         # Fysieke pinnen die GEEN GPIO zijn
         POWER_PINS = {1, 2, 4, 17}     # 3V3 / 5V
         GND_PINS   = {6, 9, 14, 20, 25, 30, 34, 39}
 
         if modulePresence.gpioAvailable:
             GPIO: GPIO = modulePresence.GPIO
+
+            FUNCTION_MAP = {
+                GPIO.IN: "IN",
+                GPIO.OUT: "OUT",
+                GPIO.ALT0: "ALT0",
+                GPIO.ALT1: "ALT1",
+                GPIO.ALT2: "ALT2",
+                GPIO.ALT3: "ALT3",
+                GPIO.ALT4: "ALT4",
+                GPIO.ALT5: "ALT5",
+            }
 
             """
             Collects GPIO state for all BCM GPIO pins (0–27) using RPi.GPIO.
