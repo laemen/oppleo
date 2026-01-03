@@ -194,7 +194,7 @@ class ChargeSessionModel(Base):
                                 .first()
                 if csm is not None:
                     for attr in inspect(ChargeSessionModel).mapper.column_attrs:
-                        getattr(cs, attr.key)
+                        getattr(csm, attr.key)
                     db_session.expunge(csm)
                 return csm
         except InvalidRequestError as e:
