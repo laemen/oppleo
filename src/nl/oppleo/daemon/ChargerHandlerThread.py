@@ -272,10 +272,10 @@ class ChargerHandlerThread(object):
         self.__logger.info('.start_charge_session() New charge session started with {}'.format(charge_session.id))
 
         rfidObj = RfidModel.get_one(rfid)
-        if rfidObj.vehicle_make.upper() == "TESLA" and rfidObj.get_odometer: 
+        if rfidObj is not None and bool(rfidObj.get_odometer): 
             # Try to add odometer
-            self.__logger.debug('.start_charge_session() Update odometer for this Tesla')
-            self.save_tesla_values_in_thread(
+            self.__logger.debug('.start_charge_session() Update odometer for the vehicle in this rfid {}'.format(rfid))
+            self.obtain_odometer_values_in_thread(
                     charge_session_id=charge_session.id,
                     condense=condense
                     )
@@ -374,8 +374,8 @@ class ChargerHandlerThread(object):
     # evse_reader_thread
     # rfid_reader_thread
     # charge_session_id is the row id in the database table
-    def save_tesla_values_in_thread(self, charge_session_id, condense=False):
-        self.__logger.debug('.save_tesla_values_in_thread() id = {} and condense = {}'.format(charge_session_id, condense))
+    def obtain_odometer_values_in_thread(self, charge_session_id, condense:bool=False):
+        self.__logger.debug('.obtain_odometer_values_in_thread() id = {} and condense = {}'.format(charge_session_id, condense))
         uotu = UpdateOdometerUtil()
         uotu.charge_session_id = charge_session_id
         uotu.condense = condense
@@ -386,8 +386,8 @@ class ChargerHandlerThread(object):
         #   This really doesn't do parallelism well, basically runs the whole thread befor it yields...
         #   Therefore use standard threads
         if oppleoConfig.vuThread is not None and oppleoConfig.vuThread.is_alive():
-            self.__logger.warning('.save_tesla_values_in_thread() VehicleUpdateThread was running (odometer) - running another one')
-        oppleoConfig.vuThread = threading.Thread(target=uotu.update_odometer, name='TeslaUtilThread')
+            self.__logger.warning('.obtain_odometer_values_in_thread() VehicleUpdateThread was running (odometer) - running another one')
+        oppleoConfig.vuThread = threading.Thread(target=uotu.update_odometer, name='OdometerUtilThread')
         oppleoConfig.vuThread.start()
 
 
