@@ -26,7 +26,7 @@ class OppleoSystemConfig(object, metaclass=Singleton):
     """
         Private variables
     """
-    __logger = logging.getLogger(f"{__name__}.{__qualname__}")
+    __logger = None
     __ini_settings = None
     __restartRequired = False
 
