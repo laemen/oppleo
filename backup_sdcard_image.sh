@@ -179,7 +179,7 @@ if [ $RAW_MODE -eq 1 ]; then
 else
     if [ $USE_PV -eq 1 ]; then
         echo "Using pv for progress bar"
-        sudo sh -c "pv -tpreb -B 4M '$SD_DEV' | dd bs=4M conv=fsync | gzip -1 > '$OUT'"
+        sudo sh -c "pv -tpreb -B 4M '$SD_DEV' | dd bs=4M | gzip -1 > '$OUT'"
     else
         sudo sh -c "dd if='$SD_DEV' bs=4M status=progress conv=fsync | gzip -1 > '$OUT'"
     fi
