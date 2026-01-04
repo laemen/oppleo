@@ -83,7 +83,11 @@ class MeasureElectricityUsageThread(object):
                 energy_device_data = EnergyDeviceModel.get()
                 if energy_device_data is not None and oppleoConfig.energyDevice is None:
                     self.createEnergyDevice()
-                
+        if (oppleoConfig.energyDevice is not None and 
+            (oppleoConfig.energyDevice.enabled or oppleoConfig.energyDevice.simulate)
+            ):
+            oppleoConfig.energyDevice.storeLastNotStoredMeasurement()
+
         self.__logger.debug(f'Terminating thread')
 
 
@@ -96,5 +100,3 @@ class MeasureElectricityUsageThread(object):
                 oppleoConfig.energyDevice.addCallback(fn)
         else:
             self.__logger.debug('MeasureElectricityUsageThread.addCallback() FAILED - no energyDevice!')
-            
-

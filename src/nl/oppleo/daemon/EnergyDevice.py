@@ -24,6 +24,7 @@ class EnergyDevice():
     lastRun = 0
     appSocketIO = None
     callbackList = []
+    __last_read_not_stored_measurement = None
 
     def __init__(self, energy_device_id=None, modbusInterval:int=10, enabled:bool=False, appSocketIO=None, simulate:bool=False):
         global oppleoSystemConfig
@@ -110,15 +111,38 @@ class EnergyDevice():
             self.__logger.debug(
                 'Last save measurement values: %s, %s, %s' % (last_save_measurement.id, last_save_measurement.kw_total,
                                                             last_save_measurement.created_at))
+        data_changed: bool = last_save_measurement is None \
+                             or self.is_a_consumption_value_changed(last_save_measurement, device_measurement)
+        mark_data_as_to_be_stored: bool = data_changed \
+                                          or self.is_measurement_interval_expired(last_save_measurement, device_measurement)
 
-        if last_save_measurement is None or self.is_a_consumption_value_changed(last_save_measurement, device_measurement) \
-                or self.is_measurement_interval_expired(last_save_measurement, device_measurement):
+        if mark_data_as_to_be_stored:
             self.__logger.debug('Measurement has changed or old one is older than 1 hour, saving it to db (if env=Production)')
-            device_measurement.save()
+            if data_changed:
+                if self.__last_read_not_stored_measurement is not None:
+                    self.__logger.debug('Also saving last not stored measurement to db before saving new changed measurement')
+                    self.__last_read_not_stored_measurement.save()
+                    self.__logger.debug("value saved %s %s %s" %
+                            (self.__last_read_not_stored_measurement.energy_device_id,
+                             self.__last_read_not_stored_measurement.id,
+                             self.__last_read_not_stored_measurement.created_at))
+                    self.__last_read_not_stored_measurement = None
+                self.__logger.debug('Measurement has changed, saving it to db')
+                device_measurement.save()
+            else:
+                self.__logger.debug('Measurement has not changed, but 1 hour has expired, saving it to db')
+                device_measurement.save()
+                # Clear last not stored measurement, as now stored
+                self.__last_read_not_stored_measurement = None
+
             self.__logger.debug("value saved %s %s %s" %
                     (device_measurement.energy_device_id, device_measurement.id, device_measurement.created_at))
-            
-        if last_save_measurement is None or self.is_a_consumption_value_changed(last_save_measurement, device_measurement):
+
+        if not data_changed and not mark_data_as_to_be_stored:
+            self.__logger.debug('Measurement has not changed and 1 hour has not yet expired, save storage by not storing it')
+            self.__last_read_not_stored_measurement = device_measurement
+
+        if data_changed:
             # Emit event
             self.counter += 1
             self.__logger.debug(f'Queue msg {self.counter} to be send ...{device_measurement.to_str()}')
@@ -181,11 +205,13 @@ class EnergyDevice():
         #  - make interval configurable
         return (diff.seconds / SECONDS_IN_HOUR) > 1
 
+
     # Callbacks called when new values are read
     def addCallback(self, fn):
         self.__logger.debug('EnergyDevice.addCallback()')
         self.callbackList.append(fn)
-        
+
+
     # Callbacks to notify update
     def callback(self, device_measurement):
         self.__logger.debug('EnergyDevice.callback()')
@@ -202,3 +228,14 @@ class EnergyDevice():
     def simulation(self, simulate=False):
         self.__logger.debug('EnergyDevice.simulate(simulate={})'.format(simulate))
         self.simulate = simulate
+
+
+    def storeLastNotStoredMeasurement(self):
+        if self.__last_read_not_stored_measurement is not None:
+            self.__logger.debug('Storing last not stored measurement to db')
+            self.__last_read_not_stored_measurement.save()
+            self.__logger.debug("value saved %s %s %s" %
+                    (self.__last_read_not_stored_measurement.energy_device_id,
+                     self.__last_read_not_stored_measurement.id,
+                     self.__last_read_not_stored_measurement.created_at))
+            self.__last_read_not_stored_measurement = None
