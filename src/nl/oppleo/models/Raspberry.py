@@ -8,7 +8,6 @@ import psutil
 import subprocess
 import sys
 import re
-import RPi.GPIO as GPIO
 
 from nl.oppleo.config.OppleoSystemConfig import OppleoSystemConfig
 from nl.oppleo.config.OppleoConfig import OppleoConfig
@@ -322,6 +321,14 @@ class Raspberry(object):
         GND_PINS   = {6, 9, 14, 20, 25, 30, 34, 39}
 
         if modulePresence.gpioAvailable:
+
+            try:
+                import RPi.GPIO as GPIO
+            except RuntimeError:
+                self.__logger.debug('GPIO (RPi) RuntimeError - possible privilege issue.')
+            except ModuleNotFoundError:
+                self.__logger.debug('GPIO (RPi) not installed.')
+
             GPIO: GPIO = modulePresence.GPIO
 
             FUNCTION_MAP = {
