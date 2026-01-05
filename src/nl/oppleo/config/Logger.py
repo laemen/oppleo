@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import sys
 
-def init_log(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
+def init_log_X(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
     logger_process = logging.getLogger(process_name)
     logger_package = logging.getLogger('nl.oppleo')
     logger_process.setLevel(loglevel)
@@ -65,7 +65,7 @@ def init_log(process_name, log_file, daemons=None, loglevel=logging.WARNING, max
 
 
 
-def init_log_old(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
+def init_log(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
     logger_process = logging.getLogger(process_name)
     logger_package = logging.getLogger('nl.oppleo')
     logger_process.setLevel(loglevel)
@@ -97,6 +97,7 @@ def init_log_old(process_name, log_file, daemons=None, loglevel=logging.WARNING,
                     maxBytes=maxBytes,          # max bytes per file 
                     backupCount=backupCount     # 5 backup files, 6 in total
                 )
+    rfHandler.setFormatter(formatter)
 
     # add the handlers to the logger
     logger_process.addHandler(fh)
