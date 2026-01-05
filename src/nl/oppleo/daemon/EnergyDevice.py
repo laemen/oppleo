@@ -113,6 +113,7 @@ class EnergyDevice():
                                                             last_save_measurement.created_at))
         data_changed: bool = last_save_measurement is None \
                              or self.is_a_consumption_value_changed(last_save_measurement, device_measurement)
+        
         mark_data_as_to_be_stored: bool = data_changed \
                                           or self.is_measurement_interval_expired(last_save_measurement, device_measurement)
 
@@ -167,7 +168,13 @@ class EnergyDevice():
     def is_a_consumption_value_changed(self, old_measurement, new_measurement):
         measurements_of_interest = {'kwh_l1', 
                                     'kwh_l2', 
-                                    'kwh_l3', 
+                                    'kwh_l3',
+                                    'a_l1', 
+                                    'a_l2', 
+                                    'a_l3',
+                                    'p_l1', 
+                                    'p_l2', 
+                                    'p_l3',
                                     'kw_total'}
 
         for measurement in measurements_of_interest:
