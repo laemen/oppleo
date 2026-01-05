@@ -1,9 +1,71 @@
 import logging
-import logging.handlers
-import sys
+from logging.handlers import RotatingFileHandler
 import os
+import sys
 
 def init_log(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
+    logger_process = logging.getLogger(process_name)
+    logger_package = logging.getLogger('nl.oppleo')
+    logger_process.setLevel(loglevel)
+    logger_package.setLevel(loglevel)
+
+    daemons = [] if daemons is None else daemons
+
+    # Create formatter with timestamp
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(process)d %(processName)s - %(thread)d %(threadName)s - %(levelname)s - %(message)s'
+    )
+
+    # Create rotating file handler
+    try:
+        rfHandler = RotatingFileHandler(log_file, maxBytes=maxBytes, backupCount=backupCount)
+    except PermissionError:
+        log_file = os.path.join(os.path.dirname(os.path.realpath(__file__)).split('src/nl/oppleo/config')[0], 'Oppleo.log')
+        rfHandler = RotatingFileHandler(log_file, maxBytes=maxBytes, backupCount=backupCount)
+    
+    rfHandler.setLevel(loglevel)
+    rfHandler.setFormatter(formatter)
+
+    # Create console handler
+    ch = logging.StreamHandler()
+    ch.setLevel(loglevel)
+    ch.setFormatter(formatter)
+
+    # Add handlers to loggers
+    for logger in [logger_process, logger_package]:
+        logger.addHandler(rfHandler)
+        logger.addHandler(ch)
+
+    # Add handlers to daemon loggers
+    for daemon in daemons:
+        logger_daemon = logging.getLogger(daemon)
+        logger_daemon.setLevel(loglevel)
+        logger_daemon.addHandler(rfHandler)
+        logger_daemon.addHandler(ch)
+
+    # Redirect stdout and stderr to log file
+    class StreamToLogger:
+        def __init__(self, logger, level=logging.INFO):
+            self.logger = logger
+            self.level = level
+            self.buffer = ''
+
+        def write(self, message):
+            message = message.rstrip()
+            if message:
+                self.logger.log(self.level, message)
+
+        def flush(self):
+            pass
+
+    sys.stdout = StreamToLogger(logger_process, logging.INFO)
+    sys.stderr = StreamToLogger(logger_process, logging.ERROR)
+
+    return logger_process
+
+
+
+def init_log_old(process_name, log_file, daemons=None, loglevel=logging.WARNING, maxBytes=524288, backupCount=5):
     logger_process = logging.getLogger(process_name)
     logger_package = logging.getLogger('nl.oppleo')
     logger_process.setLevel(loglevel)
